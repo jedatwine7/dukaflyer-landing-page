@@ -541,13 +541,13 @@ footer{background:var(--bg);border-top:1px solid var(--border2);padding:56px 0 2
         </div>
       </div>
       <div class="c-form">
-        <h3>Send Us a Message</h3>
-        <div class="fg"><label>Your Name</label><input type="text" placeholder="e.g. Amara Nakato"></div>
-        <div class="fg"><label>Phone Number</label><input type="tel" placeholder="+256 7XX XXX XXX"></div>
-        <div class="fg"><label>What are you selling?</label><select><option value="">Select a category</option><option>Fashion & Clothing</option><option>Food & Beverages</option><option>Beauty & Cosmetics</option><option>Electronics</option><option>Agriculture & Produce</option><option>Crafts & Gifts</option><option>Other</option></select></div>
-        <div class="fg"><label>Message (optional)</label><textarea placeholder="Tell us about your business or ask us anything..."></textarea></div>
-        <a href="https://wa.me/256769396906?text=Hi%20DukaFlyer!%20I%20filled%20in%20your%20contact%20form%20and%20would%20like%20to%20know%20more." target="_blank" class="btn btn-blue" style="width:100%;justify-content:center">Send via WhatsApp →</a>
-      </div>
+  <h3>Send Us a Message</h3>
+  <div class="fg"><label>Your Name</label><input type="text" id="waName" placeholder="e.g. Amara Nakato"></div>
+  <div class="fg"><label>Phone Number</label><input type="tel" id="waPhone" placeholder="+256 7XX XXX XXX"></div>
+  <div class="fg"><label>What are you selling?</label><select id="waCategory"><option value="">Select a category</option><option>Fashion & Clothing</option><option>Food & Beverages</option><option>Beauty & Cosmetics</option><option>Electronics</option><option>Agriculture & Produce</option><option>Crafts & Gifts</option><option>Other</option></select></div>
+  <div class="fg"><label>Message (optional)</label><textarea id="waMessage" placeholder="Tell us about your business or ask us anything..."></textarea></div>
+  <button onclick="sendWhatsApp()" class="btn btn-blue" style="width:100%;justify-content:center;border:none;">Send via WhatsApp →</button>
+</div>
     </div>
   </div>
 </section>
@@ -618,6 +618,30 @@ document.querySelectorAll('.feat-card,.who-card,.price-card,.partner-card,.testi
   el.style.transition='opacity .5s ease, transform .5s ease';
   obs.observe(el);
 });
+</script>
+  <script>
+function sendWhatsApp() {
+  // 1. Grab the text the user typed
+  const name = document.getElementById('waName').value.trim();
+  const phone = document.getElementById('waPhone').value.trim();
+  const category = document.getElementById('waCategory').value;
+  const message = document.getElementById('waMessage').value.trim();
+
+  // 2. Stop them if they didn't enter the basics
+  if (!name || !phone) {
+    alert("Please enter your name and phone number so we can get back to you!");
+    return;
+  }
+
+  // 3. Format the message for WhatsApp (with bold text and line breaks)
+  const rawText = `Hi DukaFlyer! I'd like to get started.\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Category:* ${category || 'Not specified'}\n*Message:* ${message || 'No additional message'}`;
+  
+  // 4. Encode it into a web link and send them to WhatsApp
+  const encodedText = encodeURIComponent(rawText);
+  const waUrl = `https://wa.me/256769396906?text=${encodedText}`;
+  
+  window.open(waUrl, '_blank');
+}
 </script>
 </body>
 </html>
