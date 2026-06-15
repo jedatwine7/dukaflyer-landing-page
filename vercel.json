@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/shop/:slug", "destination": "/shop.html" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/setup", "destination": "/setup.html" }
+    { "source": "/setup", "destination": "/setup.html" },
+    { "source": "/admin", "destination": "/admin.html" }
   ]
 }
