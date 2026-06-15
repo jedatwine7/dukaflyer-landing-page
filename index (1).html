@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DukaFlyer — Your Shop Link</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #1a7a4a;
+      --green-light: #22a86a;
+      --green-pale: #e8f7ef;
+      --yellow: #f5c800;
+      --dark: #0f1a13;
+      --mid: #3a4a3f;
+      --muted: #7a8a7f;
+      --white: #ffffff;
+      --bg: #f7faf8;
+      --card: #ffffff;
+      --radius: 16px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: rgba(247,250,248,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26,122,74,0.08);
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -0.5px;
+    }
+
+    .logo span { color: var(--yellow); }
+
+    .nav-btn {
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      border-radius: 100px;
+      padding: 10px 22px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .nav-btn:hover { background: var(--green-light); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-pale);
+      color: var(--green);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 28px;
+      letter-spacing: 0.3px;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 8px; height: 8px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 8vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      color: var(--dark);
+      max-width: 700px;
+      margin-bottom: 20px;
+    }
+
+    h1 .accent { color: var(--green); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 3vw, 1.15rem);
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    .cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      border-radius: 100px;
+      padding: 16px 32px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(26,122,74,0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-primary img {
+      width: 22px; height: 22px;
+      background: white;
+      border-radius: 50%;
+      padding: 2px;
+    }
+
+    .hero-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ── HOW IT WORKS ── */
+    .section {
+      padding: 80px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      margin-bottom: 48px;
+      color: var(--dark);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .step-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      border: 1px solid rgba(26,122,74,0.1);
+      position: relative;
+    }
+
+    .step-num {
+      width: 40px; height: 40px;
+      background: var(--green-pale);
+      color: var(--green);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+
+    .step-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .step-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── PRICING ── */
+    .pricing-section {
+      background: var(--dark);
+      padding: 80px 24px;
+    }
+
+    .pricing-inner {
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .pricing-section .section-label { color: var(--yellow); }
+    .pricing-section .section-title { color: var(--white); margin-bottom: 32px; }
+
+    .price-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+    }
+
+    .price-amount {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--yellow);
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .price-period {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 28px;
+      margin-top: 4px;
+    }
+
+    .price-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 32px;
+    }
+
+    .price-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.8);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .price-features li:last-child { border-bottom: none; }
+
+    .check {
+      width: 20px; height: 20px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      color: white;
+    }
+
+    .btn-yellow {
+      width: 100%;
+      background: var(--yellow);
+      color: var(--dark);
+      border: none;
+      border-radius: 100px;
+      padding: 16px 32px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .btn-yellow:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(26,122,74,0.08);
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,26,19,0.7);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 40px 32px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .modal-logo span { color: var(--yellow); }
+
+    .modal h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .modal p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      background: var(--white);
+      color: var(--dark);
+      border: 2px solid #e0e0e0;
+      border-radius: 100px;
+      padding: 14px 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 16px;
+    }
+
+    .google-btn:hover {
+      border-color: var(--green);
+      box-shadow: 0 2px 12px rgba(26,122,74,0.12);
+    }
+
+    .google-icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 0.82rem;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 4px;
+    }
+
+    .modal-close:hover { color: var(--dark); }
+
+    /* loading state */
+    .loading-spinner {
+      display: none;
+      width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* error message */
+    .error-msg {
+      display: none;
+      background: #fff0f0;
+      color: #c0392b;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+
+    @media (max-width: 480px) {
+      .modal { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">Duka<span>Flyer</span></div>
+    <button class="nav-btn" onclick="openModal()">Get Started</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">Built for Uganda 🇺🇬</div>
+    <h1>Your business deserves<br>a <span class="accent">shop link</span></h1>
+    <p class="hero-sub">Create your online shop in minutes. Share your link. Receive orders on WhatsApp. No tech skills needed.</p>
+    <div class="cta-group">
+      <button class="btn-primary" onclick="openModal()">
+        Get Started Free
+      </button>
+      <span class="hero-note">7 days free · No credit card needed</span>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Up and selling in 3 steps</h2>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Create your shop</h3>
+        <p>Sign in, enter your shop name, WhatsApp number, and location. Your shop is ready instantly.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Add your products</h3>
+        <p>Upload photos, set prices, add categories. As many products as you need.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Share & earn</h3>
+        <p>Share your shop link on WhatsApp, Facebook, TikTok. Orders arrive directly on your WhatsApp.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section">
+    <div class="pricing-inner">
+      <p class="section-label">Simple pricing</p>
+      <h2 class="section-title">Keep your shop live</h2>
+      <div class="price-card">
+        <div class="price-amount">20,000</div>
+        <div class="price-period">UGX per month</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Your own shop link</li>
+          <li><span class="check">✓</span> Unlimited products</li>
+          <li><span class="check">✓</span> WhatsApp order alerts</li>
+          <li><span class="check">✓</span> Nationwide delivery via Pickupwaka</li>
+          <li><span class="check">✓</span> Custom domain available</li>
+        </ul>
+        <button class="btn-yellow" onclick="openModal()">Open Your Shop Today</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo" style="margin-bottom:8px;">Duka<span style="color:var(--yellow)">Flyer</span></div>
+    <p>© 2025 DukaFlyer · Kampala, Uganda · <a href="https://wa.me/256769396906" style="color:var(--green);text-decoration:none;">WhatsApp Support</a></p>
+  </footer>
+
+  <!-- SIGN IN MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal">
+      <div class="modal-logo">Duka<span>Flyer</span></div>
+      <h2>Open your shop</h2>
+      <p>Sign in with Google to create your free shop and start receiving orders on WhatsApp.</p>
+      <div class="error-msg" id="errorMsg"></div>
+      <button class="google-btn" id="googleBtn" onclick="signInWithGoogle()">
+        <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
+      <button class="modal-close" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYEQQMbfR_YHq5nISaFRgZ0SOuAHWHWWU",
+      authDomain: "dukaflyer-ea62e.firebaseapp.com",
+      projectId: "dukaflyer-ea62e",
+      storageBucket: "dukaflyer-ea62e.firebasestorage.app",
+      messagingSenderId: "149788171032",
+      appId: "1:149788171032:web:2ddeb453162284eed8dc6d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // Check if already signed in
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in — redirect to setup page (we build this next)
+        window.location.href = "setup.html";
+      }
+    });
+
+    // Expose functions to window
+    window.signInWithGoogle = async function() {
+      const btn = document.getElementById('googleBtn');
+      const errorMsg = document.getElementById('errorMsg');
+
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+      errorMsg.style.display = 'none';
+
+      try {
+        const result = await signInWithPopup(auth, provider);
+        // onAuthStateChanged will handle the redirect
+      } catch (error) {
+        btn.disabled = false;
+        btn.innerHTML = `
+          <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google`;
+
+        if (error.code === 'auth/popup-blocked') {
+          errorMsg.textContent = 'Popup was blocked. Please allow popups for this site and try again.';
+        } else if (error.code === 'auth/cancelled-popup-request') {
+          // User closed popup — silent fail
+        } else {
+          errorMsg.textContent = 'Something went wrong. Please try again.';
+        }
+        errorMsg.style.display = 'block';
+      }
+    };
+
+    window.openModal = function() {
+      document.getElementById('modalOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeModal = function() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
+    window.handleOverlayClick = function(e) {
+      if (e.target === document.getElementById('modalOverlay')) {
+        closeModal();
+      }
+    };
+  </script>
+
+</body>
+</html>
