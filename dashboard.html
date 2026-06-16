@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — DukaFlyer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #1a7a4a;
+      --green-light: #22a86a;
+      --green-pale: #e8f7ef;
+      --yellow: #f5c800;
+      --yellow-pale: #fffbe6;
+      --dark: #0f1a13;
+      --mid: #3a4a3f;
+      --muted: #7a8a7f;
+      --white: #ffffff;
+      --bg: #f7faf8;
+      --card: #ffffff;
+      --border: #e0ebe4;
+      --radius: 16px;
+      --error: #c0392b;
+      --error-bg: #fff0f0;
+      --warning: #d4800a;
+      --warning-bg: #fff8ed;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── LOADING ── */
+    #loadingScreen {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px; z-index: 999;
+    }
+
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingScreen p { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+    }
+
+    .logo { font-size: 1.3rem; font-weight: 800; color: var(--green); letter-spacing: -0.5px; }
+    .logo span { color: var(--yellow); }
+
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--green-pale);
+      color: var(--green);
+      font-weight: 700; font-size: 0.85rem;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+    }
+
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .btn-sm {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.8rem; font-weight: 600;
+      color: var(--muted); cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-sm:hover { border-color: var(--green); color: var(--green); }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px 100px;
+    }
+
+    /* ── GREETING ── */
+    .greeting {
+      margin-bottom: 20px;
+    }
+
+    .greeting h1 {
+      font-size: 1.5rem; font-weight: 800;
+      letter-spacing: -0.5px; color: var(--dark);
+      margin-bottom: 2px;
+    }
+
+    .greeting p { font-size: 0.88rem; color: var(--muted); }
+
+    /* ── TRIAL BANNER ── */
+    .trial-banner {
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .trial-banner.active {
+      background: var(--warning-bg);
+      border: 1px solid #f5d08a;
+    }
+
+    .trial-banner.expired {
+      background: var(--error-bg);
+      border: 1px solid #f5a8a8;
+    }
+
+    .trial-banner.paid {
+      background: var(--green-pale);
+      border: 1px solid #a8dfc0;
+    }
+
+    .banner-text { flex: 1; }
+
+    .banner-title {
+      font-size: 0.88rem; font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .trial-banner.active .banner-title { color: var(--warning); }
+    .trial-banner.expired .banner-title { color: var(--error); }
+    .trial-banner.paid .banner-title { color: var(--green); }
+
+    .banner-sub { font-size: 0.78rem; color: var(--muted); }
+
+    .btn-pay {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      padding: 10px 18px;
+      font-size: 0.82rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-pay:hover { background: var(--green-light); }
+
+    /* ── SHOP LINK CARD ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .card-header {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 0.95rem; font-weight: 700;
+      color: var(--dark);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .card-icon {
+      width: 30px; height: 30px;
+      background: var(--green-pale);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .shop-link-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .shop-link-text {
+      font-size: 0.82rem; font-weight: 600;
+      color: var(--green); word-break: break-all;
+    }
+
+    .btn-copy {
+      background: var(--green);
+      color: white; border: none;
+      border-radius: 8px; padding: 6px 12px;
+      font-size: 0.75rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      flex-shrink: 0; transition: background 0.2s;
+    }
+
+    .btn-copy:hover { background: var(--green-light); }
+
+    .shop-actions {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+
+    .btn-action {
+      flex: 1;
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      padding: 10px 14px;
+      font-size: 0.8rem; font-weight: 600;
+      color: var(--mid); cursor: pointer;
+      font-family: inherit; text-align: center;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      white-space: nowrap;
+      text-decoration: none;
+      display: flex; align-items: center;
+      justify-content: center; gap: 6px;
+    }
+
+    .btn-action:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .btn-action.whatsapp {
+      background: #25d366; color: white;
+      border-color: #25d366;
+    }
+
+    .btn-action.whatsapp:hover { background: #1ebe5d; border-color: #1ebe5d; }
+
+    /* ── STATS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 1.5rem; font-weight: 800;
+      color: var(--green); letter-spacing: -1px;
+    }
+
+    .stat-label {
+      font-size: 0.7rem; color: var(--muted);
+      font-weight: 500; margin-top: 2px;
+    }
+
+    /* ── PRODUCTS ── */
+    .section-header {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 0.95rem; font-weight: 700; color: var(--dark);
+    }
+
+    .btn-add-product {
+      background: var(--green);
+      color: white; border: none;
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .btn-add-product:hover { background: var(--green-light); }
+
+    .products-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .product-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .product-thumb {
+      width: 52px; height: 52px;
+      border-radius: 10px;
+      background: var(--green-pale);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .product-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .product-details { flex: 1; min-width: 0; }
+
+    .product-name {
+      font-size: 0.88rem; font-weight: 700;
+      color: var(--dark); margin-bottom: 2px;
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .product-price {
+      font-size: 0.82rem; font-weight: 700; color: var(--green);
+    }
+
+    .product-item-actions {
+      display: flex; gap: 6px; flex-shrink: 0;
+    }
+
+    .btn-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px; border: 1px solid var(--border);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 0.85rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-icon:hover { border-color: var(--green); background: var(--green-pale); }
+    .btn-icon.delete:hover { border-color: var(--error); background: var(--error-bg); }
+
+    .empty-products {
+      background: var(--card);
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty-products .emoji { font-size: 2rem; margin-bottom: 8px; }
+    .empty-products p { font-size: 0.88rem; margin-bottom: 16px; }
+
+    /* ── ADD/EDIT PRODUCT MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(15,26,19,0.6);
+      z-index: 200; align-items: flex-end; justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 24px 24px 0 0;
+      width: 100%; max-width: 500px;
+      max-height: 90vh; overflow-y: auto;
+      padding: 24px 20px 40px;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-handle {
+      width: 40px; height: 4px;
+      background: var(--border); border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+
+    .modal-title {
+      font-size: 1.1rem; font-weight: 800;
+      color: var(--dark); margin-bottom: 20px;
+    }
+
+    .field { margin-bottom: 16px; }
+    .field:last-of-type { margin-bottom: 0; }
+
+    label {
+      display: block; font-size: 0.8rem;
+      font-weight: 600; color: var(--mid); margin-bottom: 6px;
+    }
+
+    label .req { color: var(--green); }
+
+    input, select, textarea {
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px; font-size: 0.92rem;
+      font-family: inherit; color: var(--dark);
+      background: var(--white); outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(26,122,74,0.08);
+    }
+
+    textarea { resize: vertical; min-height: 72px; }
+
+    .photo-upload {
+      border: 2px dashed var(--border);
+      border-radius: 12px; padding: 20px;
+      text-align: center; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .photo-upload:hover { border-color: var(--green); background: var(--green-pale); }
+
+    .photo-upload input[type="file"] {
+      position: absolute; inset: 0; opacity: 0;
+      cursor: pointer; width: 100%; height: 100%;
+      padding: 0; border: none;
+    }
+
+    .photo-upload p { font-size: 0.82rem; color: var(--muted); }
+    .photo-upload p strong { color: var(--green); }
+
+    .photo-preview { display: none; margin-top: 10px; border-radius: 10px; overflow: hidden; }
+    .photo-preview img { width: 100%; height: 160px; object-fit: cover; border-radius: 10px; }
+
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+    .btn-primary {
+      flex: 1; background: var(--green); color: white;
+      border: none; border-radius: 100px;
+      padding: 14px; font-size: 0.92rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover:not(:disabled) { background: var(--green-light); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-cancel {
+      background: none; border: 1.5px solid var(--border);
+      border-radius: 100px; padding: 14px 20px;
+      font-size: 0.92rem; font-weight: 600;
+      color: var(--muted); cursor: pointer; font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .btn-cancel:hover { border-color: var(--green); color: var(--green); }
+
+    /* ── DELETE CONFIRM ── */
+    .confirm-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(15,26,19,0.6); z-index: 300;
+      align-items: center; justify-content: center; padding: 24px;
+    }
+
+    .confirm-overlay.open { display: flex; }
+
+    .confirm-box {
+      background: var(--white); border-radius: 20px;
+      padding: 28px 24px; max-width: 340px; width: 100%;
+      text-align: center;
+    }
+
+    .confirm-box h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
+    .confirm-box p { font-size: 0.88rem; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
+
+    .confirm-actions { display: flex; gap: 10px; }
+
+    .btn-delete-confirm {
+      flex: 1; background: var(--error); color: white;
+      border: none; border-radius: 100px; padding: 12px;
+      font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+    }
+
+    .btn-delete-cancel {
+      flex: 1; background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 100px; padding: 12px;
+      font-size: 0.9rem; font-weight: 600;
+      color: var(--muted); cursor: pointer; font-family: inherit;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--dark); color: white;
+      border-radius: 100px; padding: 12px 24px;
+      font-size: 0.85rem; font-weight: 600;
+      z-index: 500; transition: transform 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .shop-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADING -->
+  <div id="loadingScreen">
+    <div class="spinner"></div>
+    <p>Loading your shop...</p>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Duka<span>Flyer</span></div>
+    <div class="nav-right">
+      <div class="avatar" id="navAvatar">J</div>
+      <button class="btn-sm" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main" id="mainContent" style="display:none">
+
+    <!-- GREETING -->
+    <div class="greeting">
+      <h1 id="greetingText">Good morning 👋</h1>
+      <p id="greetingShop">Managing your shop</p>
+    </div>
+
+    <!-- TRIAL BANNER -->
+    <div class="trial-banner" id="trialBanner" style="display:none">
+      <div class="banner-text">
+        <div class="banner-title" id="bannerTitle"></div>
+        <div class="banner-sub" id="bannerSub"></div>
+      </div>
+      <button class="btn-pay" id="bannerBtn" onclick="paySubscription()"></button>
+    </div>
+
+    <!-- SHOP LINK -->
+    <div class="card">
+      <div class="card-title">
+        <div class="card-icon">🔗</div>
+        Your Shop Link
+      </div>
+      <div class="shop-link-box">
+        <span class="shop-link-text" id="shopLinkText"></span>
+        <button class="btn-copy" onclick="copyLink()">Copy</button>
+      </div>
+      <div class="shop-actions">
+        <a class="btn-action" id="viewShopBtn" href="#" target="_blank">👁️ View Shop</a>
+        <button class="btn-action whatsapp" onclick="shareWhatsApp()">📤 Share</button>
+        <button class="btn-action" onclick="shareDomain()">🌐 Get Domain</button>
+        <button class="btn-action" onclick="contactSupport()" style="border-color:#25d366;color:#25d366">💬 Support</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="statProducts">0</div>
+        <div class="stat-label">Products</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statDays">7</div>
+        <div class="stat-label">Days Left</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">✓</div>
+        <div class="stat-label">Shop Live</div>
+      </div>
+    </div>
+
+
+    <!-- ANALYTICS -->
+    <div class="card" style="padding:20px;margin-bottom:16px">
+      <div class="card-title" style="margin-bottom:16px">
+        <div class="card-icon">📊</div>
+        Shop Analytics
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <div class="stat-card">
+          <div class="stat-num" id="analyticsViews">0</div>
+          <div class="stat-label">Total Views</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="analyticsToday">0</div>
+          <div class="stat-label">Today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="analyticsWeek">0</div>
+          <div class="stat-label">This Week</div>
+        </div>
+      </div>
+      <p style="font-size:0.75rem;color:var(--muted);margin-top:12px;text-align:center">Views counted each time a customer opens your shop link</p>
+    </div>
+
+        <!-- PRODUCTS -->
+    <div class="card" style="padding:20px">
+      <div class="section-header">
+        <div class="section-title">Your Products</div>
+        <button class="btn-add-product" onclick="openAddProduct()">+ Add Product</button>
+      </div>
+      <div class="products-list" id="productsList"></div>
+
+    <!-- SHOP SETTINGS -->
+    <div class="card" style="padding:20px;margin-top:16px">
+      <div class="section-header">
+        <div class="section-title" style="display:flex;align-items:center;gap:8px">
+          <div class="card-icon">⚙️</div>
+          Shop Settings
+        </div>
+        <button class="btn-add-product" onclick="openSettings()">Edit</button>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="color:var(--muted);font-weight:500">Shop name</span>
+          <span style="font-weight:700;color:var(--dark)" id="settingsShopName">-</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="color:var(--muted);font-weight:500">WhatsApp</span>
+          <span style="font-weight:700;color:var(--dark)" id="settingsWhatsapp">-</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="color:var(--muted);font-weight:500">Region</span>
+          <span style="font-weight:700;color:var(--dark)" id="settingsRegion">-</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:10px 0">
+          <span style="color:var(--muted);font-weight:500">Category</span>
+          <span style="font-weight:700;color:var(--dark)" id="settingsCategory">-</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal-overlay" id="settingsModal" onclick="handleSettingsOverlay(event)">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Edit Shop Settings</div>
+      <div class="field">
+        <label>Shop name <span class="req">*</span></label>
+        <input type="text" id="sShopName" placeholder="e.g. Nakayima Fashions" maxlength="50" />
+      </div>
+      <div class="field">
+        <label>WhatsApp number <span class="req">*</span></label>
+        <div style="display:flex;gap:8px">
+          <div style="padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;font-size:0.92rem;font-weight:600;color:var(--mid);background:var(--bg);white-space:nowrap;flex-shrink:0">+256</div>
+          <input type="tel" id="sWhatsapp" placeholder="7XXXXXXXX" maxlength="9" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Region <span class="req">*</span></label>
+        <select id="sRegion">
+          <option value="">Select region</option>
+          <option>Kampala</option><option>Wakiso</option><option>Mukono</option>
+          <option>Jinja</option><option>Mbarara</option><option>Gulu</option>
+          <option>Lira</option><option>Fort Portal</option><option>Masaka</option>
+          <option>Mbale</option><option>Soroti</option><option>Arua</option>
+          <option>Kabale</option><option>Entebbe</option><option>Hoima</option><option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Category <span class="req">*</span></label>
+        <select id="sCategory">
+          <option value="">Select category</option>
+          <option>Fashion and Clothing</option><option>Food and Drinks</option>
+          <option>Electronics</option><option>Beauty and Cosmetics</option>
+          <option>Furniture and Home</option><option>Phones and Accessories</option>
+          <option>Groceries</option><option>Pharmacy and Health</option>
+          <option>Hardware and Building</option><option>Agriculture</option>
+          <option>Stationery and Books</option><option>Other</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeSettings()">Cancel</button>
+        <button class="btn-primary" id="saveSettingsBtn" onclick="saveSettings()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD/EDIT PRODUCT MODAL -->
+  <div class="modal-overlay" id="productModal" onclick="handleModalOverlay(event)">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title" id="modalTitle">Add Product</div>
+
+      <div class="field">
+        <label>Product name <span class="req">*</span></label>
+        <input type="text" id="pName" placeholder="e.g. Men's Ankara Shirt" maxlength="80" />
+      </div>
+
+      <div class="field">
+        <label>Price (UGX) <span class="req">*</span></label>
+        <input type="number" id="pPrice" placeholder="e.g. 45000" min="0" />
+      </div>
+
+      <div class="field">
+        <label>Description <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+        <textarea id="pDesc" placeholder="Size, colour, material..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Photo <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+        <div class="photo-upload">
+          <input type="file" id="pPhoto" accept="image/*" onchange="handleModalPhoto(event)" />
+          <p>📷 <strong>Tap to upload</strong> · max 5MB</p>
+        </div>
+        <div class="photo-preview" id="pPhotoPreview">
+          <img id="pPhotoPreviewImg" src="" alt="" />
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeProductModal()">Cancel</button>
+        <button class="btn-primary" id="saveProductBtn" onclick="saveProduct()">Save Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRM -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+      <h3>Delete product?</h3>
+      <p>This will permanently remove the product from your shop. This cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn-delete-cancel" onclick="closeConfirm()">Cancel</button>
+        <button class="btn-delete-confirm" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYEQQMbfR_YHq5nISaFRgZ0SOuAHWHWWU",
+      authDomain: "dukaflyer-ea62e.firebaseapp.com",
+      projectId: "dukaflyer-ea62e",
+      storageBucket: "dukaflyer-ea62e.firebasestorage.app",
+      messagingSenderId: "149788171032",
+      appId: "1:149788171032:web:2ddeb453162284eed8dc6d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    let currentUser = null;
+    let shopData = null;
+    let editingProductId = null;
+    let deletingProductId = null;
+    let modalPhotoFile = null;
+    let modalExistingPhotoURL = null;
+
+    // Auth
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'index.html'; return; }
+      currentUser = user;
+
+      // Avatar
+      const av = document.getElementById('navAvatar');
+      if (user.photoURL) av.innerHTML = `<img src="${user.photoURL}" alt="" />`;
+      else av.textContent = (user.displayName || user.email || 'U')[0].toUpperCase();
+
+      await loadShop();
+    });
+
+    async function loadShop() {
+      try {
+        const snap = await getDoc(doc(db, 'shops', currentUser.uid));
+        if (!snap.exists()) { window.location.href = 'setup.html'; return; }
+        shopData = snap.data();
+        renderDashboard();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function renderDashboard() {
+      // Greeting
+      const hour = new Date().getHours();
+      const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+      document.getElementById('greetingText').textContent = greet + ' ' + (shopData.ownerName?.split(' ')[0] || '') + ' 👋';
+      document.getElementById('greetingShop').textContent = shopData.shopName;
+
+      // Shop link
+      const link = `dukaflyer.com/shop/${shopData.slug}`;
+      document.getElementById('shopLinkText').textContent = link;
+      document.getElementById('viewShopBtn').href = `https://${link}`;
+
+      // Trial banner
+      renderTrialBanner();
+
+      // Stats
+      const products = shopData.products || [];
+      document.getElementById('statProducts').textContent = products.length;
+
+      // Days left
+      const trialEnd = shopData.trialEndsAt?.toDate ? shopData.trialEndsAt.toDate() : new Date(shopData.trialEndsAt);
+      const daysLeft = Math.max(0, Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24)));
+      document.getElementById('statDays').textContent = shopData.status === 'active' ? '∞' : daysLeft;
+
+      // Products
+      renderProducts();
+
+      // Settings
+      renderSettings();
+
+      // Analytics
+      loadAnalytics();
+
+      // Show
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+    }
+
+    function renderTrialBanner() {
+      const banner = document.getElementById('trialBanner');
+      const title = document.getElementById('bannerTitle');
+      const sub = document.getElementById('bannerSub');
+      const btn = document.getElementById('bannerBtn');
+
+      if (shopData.status === 'active') {
+        banner.style.display = 'none';
+        return;
+      }
+
+      // Parse Firestore timestamp safely
+      let trialEnd;
+      if (shopData.trialEndsAt && typeof shopData.trialEndsAt.toDate === 'function') {
+        trialEnd = shopData.trialEndsAt.toDate();
+      } else if (shopData.trialEndsAt instanceof Date) {
+        trialEnd = shopData.trialEndsAt;
+      } else if (shopData.trialEndsAt) {
+        trialEnd = new Date(shopData.trialEndsAt);
+      } else {
+        trialEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      }
+
+      const daysLeft = Math.max(0, Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24)));
+
+      banner.style.display = 'flex';
+
+      if (daysLeft > 0) {
+        banner.className = 'trial-banner active';
+        title.textContent = '⏳ ' + daysLeft + ' day' + (daysLeft !== 1 ? 's' : '') + ' left in your free trial';
+        sub.textContent = 'Pay UGX 20,000/month to keep your shop live';
+        btn.textContent = 'Pay Now';
+      } else {
+        banner.className = 'trial-banner expired';
+        title.textContent = '⚠️ Your trial has ended';
+        sub.textContent = 'Pay UGX 20,000 to reactivate your shop';
+        btn.textContent = 'Reactivate';
+      }
+    }
+
+    function renderProducts() {
+      const list = document.getElementById('productsList');
+      const products = shopData.products || [];
+
+      if (products.length === 0) {
+        list.innerHTML = `
+          <div class="empty-products">
+            <div class="emoji">📦</div>
+            <p>No products yet. Add your first product to start selling.</p>
+            <button class="btn-add-product" onclick="openAddProduct()">+ Add Product</button>
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = products.map(p => `
+        <div class="product-item">
+          <div class="product-thumb">
+            ${p.photoURL ? `<img src="${p.photoURL}" alt="${p.name}" />` : '📦'}
+          </div>
+          <div class="product-details">
+            <div class="product-name">${p.name}</div>
+            <div class="product-price">UGX ${Number(p.price).toLocaleString()}</div>
+          </div>
+          <div class="product-item-actions">
+            <button class="btn-icon" onclick="openEditProduct('${p.id}')" title="Edit">✏️</button>
+            <button class="btn-icon delete" onclick="openDeleteConfirm('${p.id}')" title="Delete">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ── ADD PRODUCT ──
+    window.openAddProduct = function() {
+      editingProductId = null;
+      modalPhotoFile = null;
+      modalExistingPhotoURL = null;
+      document.getElementById('modalTitle').textContent = 'Add Product';
+      document.getElementById('pName').value = '';
+      document.getElementById('pPrice').value = '';
+      document.getElementById('pDesc').value = '';
+      document.getElementById('pPhoto').value = '';
+      document.getElementById('pPhotoPreview').style.display = 'none';
+      document.getElementById('saveProductBtn').textContent = 'Save Product';
+      document.getElementById('productModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    // ── EDIT PRODUCT ──
+    window.openEditProduct = function(id) {
+      const product = (shopData.products || []).find(p => p.id === id);
+      if (!product) return;
+      editingProductId = id;
+      modalPhotoFile = null;
+      modalExistingPhotoURL = product.photoURL || null;
+
+      document.getElementById('modalTitle').textContent = 'Edit Product';
+      document.getElementById('pName').value = product.name;
+      document.getElementById('pPrice').value = product.price;
+      document.getElementById('pDesc').value = product.description || '';
+      document.getElementById('pPhoto').value = '';
+      document.getElementById('saveProductBtn').textContent = 'Save Changes';
+
+      if (product.photoURL) {
+        document.getElementById('pPhotoPreviewImg').src = product.photoURL;
+        document.getElementById('pPhotoPreview').style.display = 'block';
+      } else {
+        document.getElementById('pPhotoPreview').style.display = 'none';
+      }
+
+      document.getElementById('productModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeProductModal = function() {
+      document.getElementById('productModal').classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    window.handleModalOverlay = function(e) {
+      if (e.target === document.getElementById('productModal')) closeProductModal();
+    };
+
+    window.handleModalPhoto = function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) { showToast('Photo too large — max 5MB'); return; }
+      modalPhotoFile = file;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('pPhotoPreviewImg').src = e.target.result;
+        document.getElementById('pPhotoPreview').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    };
+
+    // ── SAVE PRODUCT ──
+    window.saveProduct = async function() {
+      const name = document.getElementById('pName').value.trim();
+      const price = document.getElementById('pPrice').value;
+      const desc = document.getElementById('pDesc').value.trim();
+
+      if (!name) { showToast('Please enter a product name'); return; }
+      if (!price || isNaN(price)) { showToast('Please enter a valid price'); return; }
+
+      const btn = document.getElementById('saveProductBtn');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      try {
+        let photoURL = modalExistingPhotoURL;
+
+        if (modalPhotoFile) {
+          btn.textContent = 'Uploading photo...';
+          const photoRef = ref(storage, `products/${currentUser.uid}/${Date.now()}_${modalPhotoFile.name}`);
+          await uploadBytes(photoRef, modalPhotoFile);
+          photoURL = await getDownloadURL(photoRef);
+        }
+
+        let products = [...(shopData.products || [])];
+
+        if (editingProductId) {
+          // Edit existing
+          products = products.map(p => p.id === editingProductId
+            ? { ...p, name, price: Number(price), description: desc, photoURL: photoURL || null }
+            : p
+          );
+        } else {
+          // Add new
+          products.push({
+            id: Date.now().toString(),
+            name, price: Number(price),
+            description: desc,
+            photoURL: photoURL || null,
+            inStock: true,
+            createdAt: new Date().toISOString()
+          });
+        }
+
+        await updateDoc(doc(db, 'shops', currentUser.uid), { products });
+        shopData.products = products;
+
+        closeProductModal();
+        renderProducts();
+        document.getElementById('statProducts').textContent = products.length;
+        showToast(editingProductId ? '✓ Product updated' : '✓ Product added');
+
+      } catch (e) {
+        console.error(e);
+        showToast('Something went wrong. Try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = editingProductId ? 'Save Changes' : 'Save Product';
+      }
+    };
+
+    // ── DELETE PRODUCT ──
+    window.openDeleteConfirm = function(id) {
+      deletingProductId = id;
+      document.getElementById('confirmOverlay').classList.add('open');
+    };
+
+    window.closeConfirm = function() {
+      deletingProductId = null;
+      document.getElementById('confirmOverlay').classList.remove('open');
+    };
+
+    window.confirmDelete = async function() {
+      if (!deletingProductId) return;
+      try {
+        const products = (shopData.products || []).filter(p => p.id !== deletingProductId);
+        await updateDoc(doc(db, 'shops', currentUser.uid), { products });
+        shopData.products = products;
+        closeConfirm();
+        renderProducts();
+        document.getElementById('statProducts').textContent = products.length;
+        showToast('✓ Product deleted');
+      } catch (e) {
+        showToast('Something went wrong. Try again.');
+      }
+    };
+
+    // ── SHARE / COPY ──
+    window.copyLink = function() {
+      const link = `https://dukaflyer.com/shop/${shopData.slug}`;
+      navigator.clipboard.writeText(link).then(() => {
+        showToast('✓ Link copied!');
+      });
+    };
+
+    window.shareWhatsApp = function() {
+      const link = `https://dukaflyer.com/shop/${shopData.slug}`;
+      const msg = encodeURIComponent(`Check out my shop on DukaFlyer! 🛍️\n\nBrowse and order here: ${link}`);
+      window.open(`https://wa.me/?text=${msg}`, '_blank');
+    };
+
+    window.shareDomain = function() {
+      const msg = encodeURIComponent(`Hi DukaFlyer, I'd like to purchase a custom domain for my shop (${shopData.shopName}). Please assist.`);
+      window.open(`https://wa.me/256769396906?text=${msg}`, '_blank');
+    };
+
+    window.paySubscription = function() {
+      const msg = encodeURIComponent(`Hi DukaFlyer, I'd like to pay for my subscription to keep my shop (${shopData.shopName}) active. Please assist.`);
+      window.open(`https://wa.me/256769396906?text=${msg}`, '_blank');
+    };
+
+
+    // ── ANALYTICS ──
+    async function loadAnalytics() {
+      try {
+        const slug = shopData.slug;
+        const viewsRef = collection(db, 'views');
+        const allQ = query(viewsRef, where('slug', '==', slug));
+        const allSnap = await getDocs(allQ);
+        const total = allSnap.size;
+
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const weekAgo = new Date(today); weekAgo.setDate(today.getDate() - 7);
+
+        let todayCount = 0, weekCount = 0;
+        allSnap.forEach(d => {
+          const ts = d.data().viewedAt?.toDate ? d.data().viewedAt.toDate() : new Date(d.data().viewedAt || 0);
+          if (ts >= today) todayCount++;
+          if (ts >= weekAgo) weekCount++;
+        });
+
+        document.getElementById('analyticsViews').textContent = total;
+        document.getElementById('analyticsToday').textContent = todayCount;
+        document.getElementById('analyticsWeek').textContent = weekCount;
+      } catch(e) { console.log('Analytics load error', e); }
+    }
+
+    // ── SETTINGS ──
+    function renderSettings() {
+      document.getElementById('settingsShopName').textContent = shopData.shopName || '-';
+      document.getElementById('settingsWhatsapp').textContent = '+' + (shopData.whatsapp || '-');
+      document.getElementById('settingsRegion').textContent = shopData.region || '-';
+      document.getElementById('settingsCategory').textContent = shopData.category || '-';
+    }
+
+    window.openSettings = function() {
+      document.getElementById('sShopName').value = shopData.shopName || '';
+      const wa = shopData.whatsapp || '';
+      document.getElementById('sWhatsapp').value = wa.startsWith('256') ? wa.slice(3) : wa;
+      document.getElementById('sRegion').value = shopData.region || '';
+      document.getElementById('sCategory').value = shopData.category || '';
+      document.getElementById('settingsModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeSettings = function() {
+      document.getElementById('settingsModal').classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    window.handleSettingsOverlay = function(e) {
+      if (e.target === document.getElementById('settingsModal')) closeSettings();
+    };
+
+    window.saveSettings = async function() {
+      const shopName = document.getElementById('sShopName').value.trim();
+      const whatsapp = document.getElementById('sWhatsapp').value.trim();
+      const region = document.getElementById('sRegion').value;
+      const category = document.getElementById('sCategory').value;
+
+      if (!shopName) { showToast('Please enter a shop name'); return; }
+      if (!/^\d{9}$/.test(whatsapp)) { showToast('Enter a valid 9-digit number'); return; }
+      if (!region) { showToast('Please select a region'); return; }
+      if (!category) { showToast('Please select a category'); return; }
+
+      const btn = document.getElementById('saveSettingsBtn');
+      btn.disabled = true; btn.textContent = 'Saving...';
+
+      try {
+        const updates = { shopName, whatsapp: '256' + whatsapp, region, category };
+        await updateDoc(doc(db, 'shops', currentUser.uid), updates);
+        Object.assign(shopData, updates);
+
+        // Update greeting and shop link display
+        document.getElementById('greetingShop').textContent = shopData.shopName;
+        renderSettings();
+        closeSettings();
+        showToast('Settings saved');
+      } catch(e) {
+        console.error(e);
+        showToast('Something went wrong. Try again.');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Save Changes';
+      }
+    };
+
+    // ── SUPPORT ──
+    window.contactSupport = function() {
+      const msg = encodeURIComponent('Hi DukaFlyer Support, I need help with my shop (' + (shopData.shopName || '') + ').');
+      window.open('https://wa.me/256769396906?text=' + msg, '_blank');
+    };
+
+    // ── SIGN OUT ──
+    window.signOut = async function() {
+      await fbSignOut(auth);
+      window.location.href = 'index.html';
+    };
+
+    // ── TOAST ──
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    window.showToast = showToast;
+  </script>
+
+</body>
+</html>
