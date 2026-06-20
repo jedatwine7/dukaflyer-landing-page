@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Backfill — DukaFlyer Admin</title>
+  <style>
+    body { font-family: -apple-system, sans-serif; background: #f7faf8; padding: 40px 20px; max-width: 600px; margin: 0 auto; }
+    h1 { font-size: 1.3rem; margin-bottom: 8px; }
+    p { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+    button { background: #1a7a4a; color: white; border: none; border-radius: 100px; padding: 14px 28px; font-size: 0.95rem; font-weight: 700; cursor: pointer; }
+    button:disabled { opacity: 0.5; }
+    #log { margin-top: 20px; font-family: monospace; font-size: 0.8rem; background: white; border-radius: 12px; padding: 16px; max-height: 400px; overflow-y: auto; white-space: pre-wrap; border: 1px solid #e0ebe4; }
+  </style>
+</head>
+<body>
+  <h1>🔄 One-Time Historical Data Backfill</h1>
+  <p>This pushes the 76 historical shops into the <code>marketData</code> collection. Run this ONCE only. After running, delete this file from GitHub.</p>
+  <button id="runBtn" onclick="runBackfill()">Run Backfill</button>
+  <div id="log"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYEQQMbfR_YHq5nISaFRgZ0SOuAHWHWWU",
+      authDomain: "dukaflyer-ea62e.firebaseapp.com",
+      projectId: "dukaflyer-ea62e",
+      storageBucket: "dukaflyer-ea62e.firebasestorage.app",
+      messagingSenderId: "149788171032",
+      appId: "1:149788171032:web:2ddeb453162284eed8dc6d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const ADMIN_UID = 'TByGntGU5EaSIQOZih91Fd5sbZq1';
+
+    const historicalShops = [
+      {"name": "Saad Fashion", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Bobo Sanitary Pads", "category": "Pharmacy & Health", "region": "Central Uganda"},
+      {"name": "All goods store", "category": "Other", "region": "Central Uganda"},
+      {"name": "God's Plan", "category": "Other", "region": "Central Uganda"},
+      {"name": "ARAFAT CONNECT LTD", "category": "Other", "region": "Central Uganda"},
+      {"name": "Kidsspot uganda", "category": "Other", "region": "Central Uganda"},
+      {"name": "Husina fiza stores", "category": "Other", "region": "Central Uganda"},
+      {"name": "Ssema flats shoes", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Mozy.styles", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Kyle's Perfume Store", "category": "Beauty & Cosmetics", "region": "Central Uganda"},
+      {"name": "Victorian collections", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Nebbi express essetials", "category": "Other", "region": "Gulu"},
+      {"name": "The Scent Spot", "category": "Beauty & Cosmetics", "region": "Central Uganda"},
+      {"name": "RnGbyJojo", "category": "Other", "region": "Central Uganda"},
+      {"name": "Clothings' plug", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Bowerbird Co. Limited", "category": "Other", "region": "Central Uganda"},
+      {"name": "SHAMIE'S GOLDEN PIECES", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Linda's avenue", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Val's petal and perfume atelier", "category": "Beauty & Cosmetics", "region": "Central Uganda"},
+      {"name": "Webtech", "category": "Electronics", "region": "Central Uganda"},
+      {"name": "Whiff Hub", "category": "Beauty & Cosmetics", "region": "Central Uganda"},
+      {"name": "Remphie fashion hub", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Azmarino", "category": "Other", "region": "Central Uganda"},
+      {"name": "Fire store Accessories", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "JG jewelry store", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Walkers Hub", "category": "Other", "region": "Central Uganda"},
+      {"name": "Vortex", "category": "Other", "region": "Central Uganda"},
+      {"name": "Cake City", "category": "Food & Drinks", "region": "Central Uganda"},
+      {"name": "Veggie Basket", "category": "Agriculture", "region": "Central Uganda"},
+      {"name": "Uganda Fashion Hud", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Sparkle Up UG", "category": "Beauty & Cosmetics", "region": "Central Uganda"},
+      {"name": "Tiko shoes", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Cesar enterprises", "category": "Other", "region": "Central Uganda"},
+      {"name": "Cake palace", "category": "Food & Drinks", "region": "Central Uganda"},
+      {"name": "Noire essence", "category": "Beauty & Cosmetics", "region": "Central Uganda"},
+      {"name": "KWATSA'S SCENTS AND MORE", "category": "Beauty & Cosmetics", "region": "Central Uganda"},
+      {"name": "Global Trend Hub", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Baxter Games", "category": "Other", "region": "Central Uganda"},
+      {"name": "GEORGINA'S SHOE COLLECTION", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Chari snacks", "category": "Food & Drinks", "region": "Central Uganda"},
+      {"name": "Evexia", "category": "Beauty & Cosmetics", "region": "Central Uganda"},
+      {"name": "Mk online store", "category": "Other", "region": "Central Uganda"},
+      {"name": "J.P Store", "category": "Other", "region": "Central Uganda"},
+      {"name": "Shop Right Hub", "category": "Other", "region": "Central Uganda"},
+      {"name": "Soscy stores", "category": "Other", "region": "Central Uganda"},
+      {"name": "Hers", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "DELMONT", "category": "Other", "region": "Central Uganda"},
+      {"name": "Nova Market", "category": "Other", "region": "Central Uganda"},
+      {"name": "KEZI~STORE", "category": "Other", "region": "Central Uganda"},
+      {"name": "ShopWaveUg", "category": "Other", "region": "Central Uganda"},
+      {"name": "Life Essentials", "category": "Other", "region": "Central Uganda"},
+      {"name": "Exquisite store", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Planet NiL", "category": "Other", "region": "Central Uganda"},
+      {"name": "KEWARTS SHOP", "category": "Other", "region": "Central Uganda"},
+      {"name": "Hansy appliances", "category": "Electronics", "region": "Central Uganda"},
+      {"name": "Low cost shopping", "category": "Other", "region": "Central Uganda"},
+      {"name": "Oarexbot", "category": "Other", "region": "Central Uganda"},
+      {"name": "Chinese fashion hud", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Uganda fashion hub", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Eden farm", "category": "Agriculture", "region": "Fort Portal"},
+      {"name": "Trav store", "category": "Other", "region": "Central Uganda"},
+      {"name": "Agro Enterprise", "category": "Agriculture", "region": "Fort Portal"},
+      {"name": "StyleMint store", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Sona Media Computers", "category": "Electronics", "region": "Central Uganda"},
+      {"name": "Vintage fashion store", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Hers store", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Releis clothings and gadgets", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "AI male garmets", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Legit shoppers", "category": "Other", "region": "Central Uganda"},
+      {"name": "INTERWEAVE SOLUTIONS INTERNATIONAL", "category": "Other", "region": "Central Uganda"},
+      {"name": "Pure Glam", "category": "Beauty & Cosmetics", "region": "Central Uganda"},
+      {"name": "T&E AGRI DEALERS", "category": "Agriculture", "region": "Central Uganda"},
+      {"name": "KLON", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Classic wears", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Nathanfenty", "category": "Fashion & Clothing", "region": "Central Uganda"},
+      {"name": "Juliana hair accessories hub", "category": "Beauty & Cosmetics", "region": "Central Uganda"}
+    ];
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user || user.uid !== ADMIN_UID) {
+        document.getElementById('runBtn').disabled = true;
+        document.getElementById('log').textContent = 'Access denied. Sign in as admin first.';
+      }
+    });
+
+    window.runBackfill = async function() {
+      const btn = document.getElementById('runBtn');
+      const log = document.getElementById('log');
+      btn.disabled = true;
+      btn.textContent = 'Running...';
+      log.textContent = '';
+
+      let success = 0, failed = 0;
+
+      for (const shop of historicalShops) {
+        try {
+          await addDoc(collection(db, 'marketData'), {
+            shopName: shop.name,
+            category: shop.category,
+            region: shop.region,
+            source: 'historical_backfill',
+            createdAt: new Date().toISOString()
+          });
+          success++;
+          log.textContent += `✓ ${shop.name}\n`;
+        } catch (e) {
+          failed++;
+          log.textContent += `✗ FAILED: ${shop.name} — ${e.message}\n`;
+        }
+        log.scrollTop = log.scrollHeight;
+      }
+
+      btn.textContent = 'Done';
+      log.textContent += `\n\n=== COMPLETE: ${success} added, ${failed} failed ===`;
+    };
+  </script>
+</body>
+</html>
