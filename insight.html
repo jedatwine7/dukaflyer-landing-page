@@ -373,6 +373,23 @@
       // Combine marketData with live shop categories/regions for completeness
       let combined = [...marketData];
 
+      // Filter views the same way
+      let viewPool = [...viewsData];
+      if (category) viewPool = viewPool.filter(v => v.category === category);
+      if (region) viewPool = viewPool.filter(v => v.region === region);
+      const totalViews = viewPool.length;
+
+      // View counts by category (for ranking)
+      let viewsByCategory = {};
+      let viewsByCategoryPool = [...viewsData];
+      if (region) viewsByCategoryPool = viewsByCategoryPool.filter(v => v.region === region);
+      viewsByCategoryPool.forEach(v => {
+        const cat = v.category || 'Other';
+        viewsByCategory[cat] = (viewsByCategory[cat] || 0) + 1;
+      });
+      const sortedViewCategories = Object.entries(viewsByCategory).sort((a,b) => b[1] - a[1]);
+      const maxViewCatCount = sortedViewCategories.length ? sortedViewCategories[0][1] : 0;
+
       // Category counts (filtered by region if selected)
       let categoryPool = combined;
       if (region) categoryPool = categoryPool.filter(d => d.region === region);
@@ -417,6 +434,7 @@
       if (category) {
         const countForCategory = categoryCounts[category] || 0;
         const pctOfTotal = totalInPool > 0 ? Math.round((countForCategory / totalInPool) * 100) : 0;
+        const viewsForCategory = viewsByCategory[category] || 0;
 
         html += `
           <div class="insight-card">
@@ -424,9 +442,15 @@
               <div class="insight-icon">🏪</div>
               <div class="insight-title">${category}${region ? ' in ' + region : ' in Uganda'}</div>
             </div>
-            <div class="big-stat">
-              <div class="big-stat-num">${countForCategory}</div>
-              <div class="big-stat-label">shops already selling this${region ? ' in ' + region : ' nationwide'}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="big-stat" style="padding:12px 0">
+                <div class="big-stat-num" style="font-size:1.9rem">${countForCategory}</div>
+                <div class="big-stat-label">shops selling this</div>
+              </div>
+              <div class="big-stat" style="padding:12px 0">
+                <div class="big-stat-num" style="font-size:1.9rem;color:#1877f2">${viewsForCategory}</div>
+                <div class="big-stat-label">customer views logged</div>
+              </div>
             </div>
             <div class="verdict-box">
               <p>${pctOfTotal >= 25
@@ -434,7 +458,8 @@
                 : pctOfTotal > 0
                 ? `<strong>This is a smaller category</strong> — only ${pctOfTotal}% of shops sell this. Could mean less competition, or it could mean lower demand. Worth testing carefully.`
                 : `<strong>No shops found yet</strong> in this exact category${region ? ' for ' + region : ''}. You could be early — that's an opportunity or a warning, test small first.`
-              }</p>
+              }
+              ${viewsForCategory > 0 ? ` Customers have viewed shops in this category <strong>${viewsForCategory} time${viewsForCategory !== 1 ? 's' : ''}</strong> — a sign of real buyer interest, not just sellers.` : ''}</p>
             </div>
           </div>`;
       }
@@ -461,6 +486,32 @@
                   </div>`;
               }).join('')}
             </div>
+          </div>`;
+      }
+
+      // Most viewed categories (demand signal)
+      if (sortedViewCategories.length > 0) {
+        html += `
+          <div class="insight-card">
+            <div class="insight-header">
+              <div class="insight-icon">👀</div>
+              <div class="insight-title">Most viewed by customers${region ? ' in ' + region : ' in Uganda'}</div>
+            </div>
+            <div class="rank-list">
+              ${sortedViewCategories.slice(0, 6).map((entry, i) => {
+                const [name, count] = entry;
+                const width = maxViewCatCount > 0 ? Math.round((count / maxViewCatCount) * 100) : 0;
+                return `
+                  <div class="rank-row">
+                    <div class="rank-num" style="background:#e8f0fe;color:#1877f2">${i+1}</div>
+                    <div class="rank-info">
+                      <div class="rank-name">${name} <span style="color:#1877f2">${count} views</span></div>
+                      <div class="rank-bar-bg"><div class="rank-bar-fill" style="width:${width}%;background:#1877f2"></div></div>
+                    </div>
+                  </div>`;
+              }).join('')}
+            </div>
+            <p style="font-size:0.74rem;color:var(--muted);margin-top:12px">This is real customer interest — categories getting browsed the most by buyers visiting DukaFlyer shops.</p>
           </div>`;
       }
 
