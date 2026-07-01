@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Your Shop — DukaFlyer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #1a7a4a;
+      --green-light: #22a86a;
+      --green-pale: #e8f7ef;
+      --yellow: #f5c800;
+      --dark: #0f1a13;
+      --mid: #3a4a3f;
+      --muted: #7a8a7f;
+      --white: #ffffff;
+      --bg: #f7faf8;
+      --card: #ffffff;
+      --border: #e0ebe4;
+      --radius: 16px;
+      --error: #c0392b;
+      --error-bg: #fff0f0;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -0.5px;
+    }
+
+    .logo span { color: var(--yellow); }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--green-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--green);
+      overflow: hidden;
+    }
+
+    .user-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .sign-out-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .sign-out-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    .page-header p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── PROGRESS ── */
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 36px;
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .step-dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--border);
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .step-dot.active {
+      background: var(--green);
+      color: white;
+    }
+
+    .step-dot.done {
+      background: var(--green-pale);
+      color: var(--green);
+    }
+
+    .step-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .step-label.active { color: var(--green); }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      margin: 0 8px;
+      transition: background 0.3s;
+    }
+
+    .step-line.done { background: var(--green); }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-icon {
+      width: 32px; height: 32px;
+      background: var(--green-pale);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    /* ── FORM ── */
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--mid);
+      margin-bottom: 6px;
+    }
+
+    label .required { color: var(--green); }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--dark);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(26,122,74,0.08);
+    }
+
+    input.error, select.error {
+      border-color: var(--error);
+    }
+
+    .field-error {
+      font-size: 0.78rem;
+      color: var(--error);
+      margin-top: 5px;
+      display: none;
+    }
+
+    .field-error.show { display: block; }
+
+    .phone-input-wrap {
+      display: flex;
+      gap: 8px;
+    }
+
+    .phone-prefix {
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--mid);
+      background: var(--bg);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* ── PRODUCT PHOTO ── */
+    .photo-upload {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .photo-upload:hover {
+      border-color: var(--green);
+      background: var(--green-pale);
+    }
+
+    .photo-upload input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: none;
+    }
+
+    .photo-upload-icon { font-size: 2rem; margin-bottom: 8px; }
+
+    .photo-upload p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .photo-upload p strong {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .photo-preview {
+      display: none;
+      margin-top: 12px;
+      border-radius: 10px;
+      overflow: hidden;
+      max-height: 200px;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    /* ── SUBMIT ── */
+    .submit-section {
+      margin-top: 8px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      border-radius: 100px;
+      padding: 16px 32px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--green-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .submit-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    /* ── LOADING SCREEN ── */
+    #loadingScreen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #loadingScreen p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ── SUCCESS SCREEN ── */
+    #successScreen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      align-items: center;
+      justify-content: center;
+      z-index: 998;
+      padding: 24px;
+    }
+
+    #successScreen.show { display: flex; }
+
+    .success-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 40px 32px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .success-icon {
+      width: 72px; height: 72px;
+      background: var(--green-pale);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 20px;
+    }
+
+    .success-card h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .success-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .shop-link-box {
+      background: var(--green-pale);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .shop-link-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--green);
+      word-break: break-all;
+      text-align: left;
+    }
+
+    .copy-btn {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .copy-btn:hover { background: var(--green-light); }
+
+    .btn-whatsapp {
+      width: 100%;
+      background: #25d366;
+      color: white;
+      border: none;
+      border-radius: 100px;
+      padding: 14px 24px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      margin-bottom: 10px;
+      transition: background 0.2s;
+    }
+
+    .btn-whatsapp:hover { background: #1ebe5d; }
+
+    .btn-dashboard {
+      width: 100%;
+      background: none;
+      color: var(--green);
+      border: 1.5px solid var(--green);
+      border-radius: 100px;
+      padding: 14px 24px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .btn-dashboard:hover { background: var(--green-pale); }
+
+    /* Global error */
+    .global-error {
+      background: var(--error-bg);
+      color: var(--error);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .global-error.show { display: block; }
+
+    @media (max-width: 480px) {
+      .main { padding: 24px 16px 80px; }
+      .card { padding: 20px 16px; }
+      .step-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADING -->
+  <div id="loadingScreen">
+    <div class="spinner"></div>
+    <p>Setting up...</p>
+  </div>
+
+  <!-- SUCCESS -->
+  <div id="successScreen">
+    <div class="success-card">
+      <div class="success-icon">🎉</div>
+      <h2>Your shop is live!</h2>
+      <p>Share your link everywhere — WhatsApp status, Facebook, TikTok bio. Orders come straight to your WhatsApp.</p>
+      <div class="shop-link-box">
+        <span class="shop-link-text" id="successLink"></span>
+        <button class="copy-btn" onclick="copyShopLink()">Copy</button>
+      </div>
+      <button class="btn-whatsapp" onclick="shareOnWhatsApp()">📤 Share on WhatsApp</button>
+      <button class="btn-dashboard" onclick="goToDashboard()">Manage my shop →</button>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">Duka<span>Flyer</span></div>
+    <div class="user-info">
+      <div class="user-avatar" id="userAvatar">J</div>
+      <button class="sign-out-btn" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <div class="page-header">
+      <h1>Create your shop</h1>
+      <p>Fill in your details below. Your shop goes live the moment you tap <strong>Create Shop</strong>.</p>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-bar">
+      <div class="progress-step">
+        <div class="step-dot active" id="dot1">1</div>
+        <span class="step-label active">Shop details</span>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="progress-step">
+        <div class="step-dot" id="dot2">2</div>
+        <span class="step-label">First product</span>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="progress-step">
+        <div class="step-dot" id="dot3">3</div>
+        <span class="step-label">Go live</span>
+      </div>
+    </div>
+
+    <div class="global-error" id="globalError"></div>
+
+    <!-- SHOP DETAILS -->
+    <div class="card">
+      <div class="card-title">
+        <div class="card-icon">🏪</div>
+        Shop details
+      </div>
+
+      <div class="field">
+        <label>Shop name <span class="required">*</span></label>
+        <input type="text" id="shopName" placeholder="e.g. Nakayima Fashions" maxlength="50" />
+        <div class="field-error" id="shopNameError">Please enter your shop name</div>
+      </div>
+
+      <div class="field">
+        <label>WhatsApp number <span class="required">*</span></label>
+        <div class="phone-input-wrap">
+          <div class="phone-prefix">🇺🇬 +256</div>
+          <input type="tel" id="whatsappNumber" placeholder="7XXXXXXXX" maxlength="9" />
+        </div>
+        <div class="field-error" id="whatsappError">Please enter a valid Uganda number (9 digits)</div>
+      </div>
+
+      <div class="field">
+        <label>Region / Location <span class="required">*</span></label>
+        <select id="region">
+          <option value="">Select your region</option>
+          <option>Kampala</option>
+          <option>Wakiso</option>
+          <option>Mukono</option>
+          <option>Jinja</option>
+          <option>Mbarara</option>
+          <option>Gulu</option>
+          <option>Lira</option>
+          <option>Fort Portal</option>
+          <option>Masaka</option>
+          <option>Mbale</option>
+          <option>Soroti</option>
+          <option>Arua</option>
+          <option>Kabale</option>
+          <option>Entebbe</option>
+          <option>Hoima</option>
+          <option>Other</option>
+        </select>
+        <div class="field-error" id="regionError">Please select your region</div>
+      </div>
+
+      <div class="field">
+        <label>What do you sell? <span class="required">*</span></label>
+        <select id="category">
+          <option value="">Select a category</option>
+          <option>Fashion & Clothing</option>
+          <option>Food & Drinks</option>
+          <option>Electronics</option>
+          <option>Beauty & Cosmetics</option>
+          <option>Furniture & Home</option>
+          <option>Phones & Accessories</option>
+          <option>Groceries</option>
+          <option>Pharmacy & Health</option>
+          <option>Hardware & Building</option>
+          <option>Agriculture</option>
+          <option>Stationery & Books</option>
+          <option>Other</option>
+        </select>
+        <div class="field-error" id="categoryError">Please select what you sell</div>
+      </div>
+    </div>
+
+    <!-- FIRST PRODUCT -->
+    <div class="card">
+      <div class="card-title">
+        <div class="card-icon">📦</div>
+        Add your first product
+      </div>
+
+      <div class="field">
+        <label>Product name <span class="required">*</span></label>
+        <input type="text" id="productName" placeholder="e.g. Men's Ankara Shirt" maxlength="80" />
+        <div class="field-error" id="productNameError">Please enter a product name</div>
+      </div>
+
+      <div class="field">
+        <label>Price (UGX) <span class="required">*</span></label>
+        <input type="number" id="productPrice" placeholder="e.g. 45000" min="0" />
+        <div class="field-error" id="productPriceError">Please enter a valid price</div>
+      </div>
+
+      <div class="field">
+        <label>Product description <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+        <textarea id="productDesc" placeholder="Describe the product — size, colour, material..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Product photo <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+        <div class="photo-upload" id="photoUploadArea">
+          <input type="file" id="productPhoto" accept="image/*" onchange="handlePhotoChange(event)" />
+          <div class="photo-upload-icon">📷</div>
+          <p><strong>Tap to upload photo</strong><br>JPG, PNG — max 5MB</p>
+        </div>
+        <div class="photo-preview" id="photoPreview">
+          <img id="photoPreviewImg" src="" alt="Product photo" />
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-section">
+      <button class="btn-primary" id="createBtn" onclick="createShop()">
+        🚀 Create My Shop
+      </button>
+      <p class="submit-note">Your shop goes live instantly · 7 days free trial</p>
+    </div>
+
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, serverTimestamp, collection } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYEQQMbfR_YHq5nISaFRgZ0SOuAHWHWWU",
+      authDomain: "dukaflyer-ea62e.firebaseapp.com",
+      projectId: "dukaflyer-ea62e",
+      storageBucket: "dukaflyer-ea62e.firebasestorage.app",
+      messagingSenderId: "149788171032",
+      appId: "1:149788171032:web:2ddeb453162284eed8dc6d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    let currentUser = null;
+    let photoFile = null;
+    let createdShopSlug = null;
+
+    // Auth gate
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      currentUser = user;
+
+      // Check if shop already exists
+      const shopDoc = await getDoc(doc(db, "shops", user.uid));
+      if (shopDoc.exists()) {
+        window.location.href = "dashboard.html";
+        return;
+      }
+
+      // Show UI
+      document.getElementById('loadingScreen').style.display = 'none';
+
+      // Set avatar
+      const avatar = document.getElementById('userAvatar');
+      if (user.photoURL) {
+        avatar.innerHTML = `<img src="${user.photoURL}" alt="avatar" />`;
+      } else {
+        avatar.textContent = (user.displayName || user.email || 'U')[0].toUpperCase();
+      }
+
+      prefillFromDukaDraft();
+    });
+
+    // Pre-fill the form from a shop draft collected by the Duka AI chat widget
+    function prefillFromDukaDraft() {
+      let draft;
+      try {
+        const raw = localStorage.getItem('dukaShopDraft');
+        if (!raw) return;
+        draft = JSON.parse(raw);
+      } catch (e) {
+        return;
+      }
+
+      if (draft.shopName) {
+        document.getElementById('shopName').value = draft.shopName;
+      }
+
+      if (draft.whatsapp) {
+        // Normalize to the last 9 digits (form only wants the local part, prefix +256 is fixed in UI)
+        const digits = String(draft.whatsapp).replace(/\D/g, '');
+        document.getElementById('whatsappNumber').value = digits.slice(-9);
+      }
+
+      if (draft.region) {
+        setSelectIfMatch('region', draft.region);
+      }
+
+      if (draft.category) {
+        setSelectIfMatch('category', draft.category);
+      }
+
+      if (Array.isArray(draft.products) && draft.products.length > 0) {
+        const p = draft.products[0];
+        if (p.name) document.getElementById('productName').value = p.name;
+        if (p.price !== undefined && p.price !== null) {
+          const priceNum = String(p.price).replace(/[^\d.]/g, '');
+          if (priceNum) document.getElementById('productPrice').value = priceNum;
+        }
+      }
+
+      // Consume it — don't re-fill if they refresh or come back later
+      localStorage.removeItem('dukaShopDraft');
+
+      // Let them know it was pre-filled
+      const header = document.querySelector('.page-header');
+      if (header) {
+        const banner = document.createElement('div');
+        banner.style.cssText = 'background:var(--green-pale);border:1px solid var(--green);border-radius:12px;padding:12px 16px;margin-top:14px;font-size:0.85rem;color:var(--dark);';
+        banner.textContent = "✨ Pre-filled from your chat with Duka AI — please check everything looks right before creating your shop.";
+        header.appendChild(banner);
+      }
+    }
+
+    // Selects a <select> option by matching its visible text (case-insensitive, exact match only)
+    function setSelectIfMatch(selectId, value) {
+      const select = document.getElementById(selectId);
+      if (!select) return;
+      const target = String(value).trim().toLowerCase();
+      for (const opt of select.options) {
+        if (opt.textContent.trim().toLowerCase() === target) {
+          select.value = opt.value;
+          return;
+        }
+      }
+      // No exact match — leave as-is so the user picks manually rather than silently selecting the wrong thing
+    }
+
+    // Generate URL-safe slug from shop name
+    function generateSlug(name) {
+      return name
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .substring(0, 30);
+    }
+
+    // Handle photo
+    window.handlePhotoChange = function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Photo is too large. Please use an image under 5MB.');
+        return;
+      }
+      photoFile = file;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('photoPreviewImg').src = e.target.result;
+        document.getElementById('photoPreview').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    };
+
+    // Validate
+    function validate() {
+      let valid = true;
+
+      const fields = [
+        { id: 'shopName', errorId: 'shopNameError', check: v => v.trim().length >= 2 },
+        { id: 'whatsappNumber', errorId: 'whatsappError', check: v => /^\d{9}$/.test(v.trim()) },
+        { id: 'region', errorId: 'regionError', check: v => v !== '' },
+        { id: 'category', errorId: 'categoryError', check: v => v !== '' },
+        { id: 'productName', errorId: 'productNameError', check: v => v.trim().length >= 2 },
+        { id: 'productPrice', errorId: 'productPriceError', check: v => !isNaN(v) && Number(v) >= 0 },
+      ];
+
+      fields.forEach(({ id, errorId, check }) => {
+        const el = document.getElementById(id);
+        const errEl = document.getElementById(errorId);
+        const val = el.value;
+        if (!check(val)) {
+          el.classList.add('error');
+          errEl.classList.add('show');
+          valid = false;
+        } else {
+          el.classList.remove('error');
+          errEl.classList.remove('show');
+        }
+      });
+
+      return valid;
+    }
+
+    // Create shop
+    window.createShop = async function() {
+      if (!validate()) return;
+
+      const btn = document.getElementById('createBtn');
+      const globalError = document.getElementById('globalError');
+      btn.disabled = true;
+      btn.textContent = 'Creating your shop...';
+      globalError.classList.remove('show');
+
+      // Update progress
+      document.getElementById('dot1').className = 'step-dot done';
+      document.getElementById('dot1').textContent = '✓';
+      document.getElementById('line1').classList.add('done');
+      document.getElementById('dot2').className = 'step-dot active';
+      document.getElementById('dot2').textContent = '2';
+
+      try {
+        const shopName = document.getElementById('shopName').value.trim();
+        const whatsapp = '256' + document.getElementById('whatsappNumber').value.trim();
+        const region = document.getElementById('region').value;
+        const category = document.getElementById('category').value;
+        const productName = document.getElementById('productName').value.trim();
+        const productPrice = Number(document.getElementById('productPrice').value);
+        const productDesc = document.getElementById('productDesc').value.trim();
+
+        const slug = generateSlug(shopName);
+        createdShopSlug = slug;
+
+        // Upload photo if provided
+        let photoURL = null;
+        if (photoFile) {
+          btn.textContent = 'Uploading photo...';
+          const photoRef = ref(storage, `products/${currentUser.uid}/${Date.now()}_${photoFile.name}`);
+          await uploadBytes(photoRef, photoFile);
+          photoURL = await getDownloadURL(photoRef);
+        }
+
+        // Update progress
+        document.getElementById('dot2').className = 'step-dot done';
+        document.getElementById('dot2').textContent = '✓';
+        document.getElementById('line2').classList.add('done');
+        document.getElementById('dot3').className = 'step-dot active';
+        btn.textContent = 'Going live...';
+
+        // Trial end date — 7 days from now
+        const trialEnd = new Date();
+        trialEnd.setDate(trialEnd.getDate() + 7);
+
+        // Save shop to Firestore
+        await setDoc(doc(db, "shops", currentUser.uid), {
+          uid: currentUser.uid,
+          shopName,
+          slug,
+          whatsapp,
+          region,
+          category,
+          ownerName: currentUser.displayName || '',
+          ownerEmail: currentUser.email || '',
+          status: 'trial',
+          trialEndsAt: trialEnd,
+          createdAt: serverTimestamp(),
+          products: [{
+            id: Date.now().toString(),
+            name: productName,
+            price: productPrice,
+            description: productDesc,
+            photoURL: photoURL || null,
+            inStock: true,
+            createdAt: new Date().toISOString()
+          }]
+        });
+
+        // Also save slug lookup
+        await setDoc(doc(db, "slugs", slug), {
+          uid: currentUser.uid,
+          shopName
+        });
+
+        // Add to market intelligence data
+        try {
+          await setDoc(doc(collection(db, "marketData")), {
+            shopName,
+            category,
+            region,
+            source: 'live_signup',
+            uid: currentUser.uid,
+            createdAt: serverTimestamp()
+          });
+        } catch (e) { /* don't block shop creation if this fails */ }
+
+        // Update progress done
+        document.getElementById('dot3').className = 'step-dot done';
+        document.getElementById('dot3').textContent = '✓';
+
+        // Show success
+        const shopLink = `dukaflyer.com/shop/${slug}`;
+        document.getElementById('successLink').textContent = shopLink;
+        document.getElementById('successScreen').classList.add('show');
+
+      } catch (err) {
+        console.error(err);
+        btn.disabled = false;
+        btn.textContent = '🚀 Create My Shop';
+        globalError.textContent = 'Something went wrong. Please try again.';
+        globalError.classList.add('show');
+
+        // Reset progress
+        document.getElementById('dot1').className = 'step-dot active';
+        document.getElementById('dot1').textContent = '1';
+        document.getElementById('line1').classList.remove('done');
+        document.getElementById('dot2').className = 'step-dot';
+        document.getElementById('dot2').textContent = '2';
+        document.getElementById('line2').classList.remove('done');
+        document.getElementById('dot3').className = 'step-dot';
+        document.getElementById('dot3').textContent = '3';
+      }
+    };
+
+    // Copy link
+    window.copyShopLink = function() {
+      const link = document.getElementById('successLink').textContent;
+      navigator.clipboard.writeText('https://' + link).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      });
+    };
+
+    // Share on WhatsApp
+    window.shareOnWhatsApp = function() {
+      const link = `https://dukaflyer.com/shop/${createdShopSlug}`;
+      const msg = encodeURIComponent(`Check out my shop on DukaFlyer! 🛍️\n\n${link}`);
+      window.open(`https://wa.me/?text=${msg}`, '_blank');
+    };
+
+    // Go to dashboard
+    window.goToDashboard = function() {
+      window.location.href = 'dashboard.html';
+    };
+
+    // Sign out
+    window.signOut = async function() {
+      await fbSignOut(auth);
+      window.location.href = 'index.html';
+    };
+  </script>
+
+</body>
+</html>
