@@ -281,7 +281,7 @@
       if (!el) { clearInterval(loadingEmojiInterval); return; }
       loadingEmojiIndex = (loadingEmojiIndex + 1) % LOADING_EMOJIS.length;
       el.textContent = LOADING_EMOJIS[loadingEmojiIndex];
-    }, 600);
+    }, 300);
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
