@@ -149,7 +149,7 @@
       <p>Create your own online shop in 5 minutes, free to start. Sell in Uganda and take orders directly on WhatsApp | no app, no code needed.</p>
     </div>
   </noscript>
-  <div id="loadingScreen"><div id="loadingEmoji">🤗</div></div>
+  <div id="loadingScreen"><div id="loadingEmoji"></div></div>
 
   <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
     <div class="modal">
@@ -281,7 +281,7 @@
       if (!el) { clearInterval(loadingEmojiInterval); return; }
       loadingEmojiIndex = (loadingEmojiIndex + 1) % LOADING_EMOJIS.length;
       el.textContent = LOADING_EMOJIS[loadingEmojiIndex];
-    }, 300);
+    }, 200);
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
