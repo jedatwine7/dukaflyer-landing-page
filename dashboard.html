@@ -645,10 +645,10 @@
         <button class="btn-action" onclick="contactSupport()" style="border-color:#25d366;color:#25d366">💬 Support</button>
       </div>
       <a href="/advertise" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;background:linear-gradient(135deg,#1877f2,#e1306c);color:white;border:none;border-radius:100px;padding:14px;font-size:0.92rem;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;transition:opacity 0.2s" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">
-         Advertise My Shop on Facebook &amp; Instagram
+        📣 Advertise My Shop on Facebook &amp; Instagram
       </a>
       <a href="/insight" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;background:var(--green-pale);color:var(--green);border:1.5px solid var(--green);border-radius:100px;padding:13px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;transition:background 0.2s" onmouseover="this.style.background='#d5f0e2'" onmouseout="this.style.background='var(--green-pale)'">
-         See Market Insight - What's Selling Where
+        📊 See Market Insight — What's Selling Where
       </a>
     </div>
 
@@ -798,6 +798,14 @@
         <textarea id="pDesc" placeholder="Size, colour, material..."></textarea>
       </div>
 
+      <!-- CATEGORY DROPDOWN ADDED HERE -->
+      <div class="field">
+        <label>Category <span class="req">*</span></label>
+        <select id="pCategory">
+          <option value="">Select category</option>
+        </select>
+      </div>
+
       <div class="field">
         <label>Photo <span style="color:var(--muted);font-weight:400">(optional)</span></label>
         <div class="photo-upload">
@@ -846,7 +854,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, where, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
     const firebaseConfig = {
@@ -869,6 +877,37 @@
     let deletingProductId = null;
     let modalPhotoFile = null;
     let modalExistingPhotoURL = null;
+    let categories = [];
+
+    // ── LOAD CATEGORIES ──
+    async function loadCategories() {
+      try {
+        const docSnap = await getDoc(doc(db, 'config', 'categories'));
+        if (docSnap.exists()) {
+          categories = docSnap.data().list || [];
+        }
+      } catch(e) {}
+      if (!categories.length) {
+        categories = [
+          'Fashion & Clothing', 'Shoes & Footwear', 'Bags & Accessories',
+          'Electronics', 'Beauty & Cosmetics', 'Home & Kitchen',
+          'Food & Beverages', 'Health & Wellness', 'Baby & Kids',
+          'Phones & Accessories', 'Stationery & Office', 'Other'
+        ];
+        // Try to save the default list so it exists next time
+        try {
+          await setDoc(doc(db, 'config', 'categories'), { list: categories });
+        } catch(e) {}
+      }
+      // Populate settings category dropdown too
+      const sCat = document.getElementById('sCategory');
+      if (sCat) {
+        const currentVal = sCat.value;
+        sCat.innerHTML = '<option value="">Select category</option>' +
+          categories.map(c => `<option value="${c}">${c}</option>`).join('');
+        sCat.value = currentVal;
+      }
+    }
 
     // Auth
     onAuthStateChanged(auth, async (user) => {
@@ -880,6 +919,7 @@
       if (user.photoURL) av.innerHTML = `<img src="${user.photoURL}" alt="" />`;
       else av.textContent = (user.displayName || user.email || 'U')[0].toUpperCase();
 
+      await loadCategories();
       await loadShop();
     });
 
@@ -1021,6 +1061,13 @@
       document.getElementById('pPhoto').value = '';
       document.getElementById('pPhotoPreview').style.display = 'none';
       document.getElementById('saveProductBtn').textContent = 'Save Product';
+
+      // Populate category dropdown
+      const select = document.getElementById('pCategory');
+      select.innerHTML = '<option value="">Select category</option>' +
+        categories.map(c => `<option value="${c}">${c}</option>`).join('');
+      select.value = '';
+
       document.getElementById('productModal').classList.add('open');
       document.body.style.overflow = 'hidden';
     };
@@ -1039,6 +1086,12 @@
       document.getElementById('pDesc').value = product.description || '';
       document.getElementById('pPhoto').value = '';
       document.getElementById('saveProductBtn').textContent = 'Save Changes';
+
+      // Populate category dropdown and set selected
+      const select = document.getElementById('pCategory');
+      select.innerHTML = '<option value="">Select category</option>' +
+        categories.map(c => `<option value="${c}">${c}</option>`).join('');
+      select.value = product.category || 'Other';
 
       if (product.photoURL) {
         document.getElementById('pPhotoPreviewImg').src = product.photoURL;
@@ -1078,9 +1131,11 @@
       const name = document.getElementById('pName').value.trim();
       const price = document.getElementById('pPrice').value;
       const desc = document.getElementById('pDesc').value.trim();
+      const category = document.getElementById('pCategory').value;
 
       if (!name) { showToast('Please enter a product name'); return; }
       if (!price || isNaN(price)) { showToast('Please enter a valid price'); return; }
+      if (!category) { showToast('Please select a category'); return; }
 
       const btn = document.getElementById('saveProductBtn');
       btn.disabled = true;
@@ -1101,7 +1156,7 @@
         if (editingProductId) {
           // Edit existing
           products = products.map(p => p.id === editingProductId
-            ? { ...p, name, price: Number(price), description: desc, photoURL: photoURL || null }
+            ? { ...p, name, price: Number(price), description: desc, photoURL: photoURL || null, category }
             : p
           );
         } else {
@@ -1111,6 +1166,7 @@
             name, price: Number(price),
             description: desc,
             photoURL: photoURL || null,
+            category: category,
             inStock: true,
             createdAt: new Date().toISOString()
           });
