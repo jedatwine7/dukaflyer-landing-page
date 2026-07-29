@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shop | DukaFlyer</title>
+  <title>Shop — DukaFlyer</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16.png" />
@@ -239,43 +239,6 @@
 
     .search-bar input::placeholder { color: var(--muted); }
 
-    /* ── CATEGORY FILTERS ── */
-    #categoryFilters {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      margin: 16px 16px 20px;
-      padding-bottom: 4px;
-      scrollbar-width: none;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    #categoryFilters::-webkit-scrollbar { display: none; }
-    .filter-chip {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 100px;
-      padding: 6px 14px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--muted);
-      cursor: pointer;
-      font-family: inherit;
-      white-space: nowrap;
-      transition: all 0.2s;
-      flex-shrink: 0;
-    }
-    .filter-chip.active {
-      background: var(--green);
-      border-color: var(--green);
-      color: white;
-    }
-    .filter-chip:hover:not(.active) {
-      border-color: var(--green);
-      color: var(--green);
-    }
-
     /* ── MAIN CONTENT ── */
     .main {
       max-width: 700px;
@@ -457,4 +420,832 @@
       width: 40px; height: 4px;
       background: var(--border);
       border-radius: 2px;
-      margin
+      margin: 0 auto 20px;
+    }
+
+    .cart-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 16px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-item:last-of-type { border-bottom: none; }
+
+    .cart-item-photo {
+      width: 48px; height: 48px;
+      border-radius: 10px;
+      background: var(--green-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .cart-item-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .cart-item-info { flex: 1; }
+
+    .cart-item-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+
+    .cart-item-price {
+      font-size: 0.82rem;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .cart-item-qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qty-btn {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dark);
+      transition: border-color 0.2s;
+    }
+
+    .qty-btn:hover { border-color: var(--green); color: var(--green); }
+
+    .qty-num {
+      font-size: 0.9rem;
+      font-weight: 700;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 16px 0;
+      padding: 14px 16px;
+      background: var(--green-pale);
+      border-radius: 12px;
+    }
+
+    .cart-total-label { font-size: 0.88rem; font-weight: 600; color: var(--mid); }
+    .cart-total-amount { font-size: 1.1rem; font-weight: 800; color: var(--green); }
+
+    .cart-empty {
+      text-align: center;
+      padding: 32px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .btn-whatsapp-order {
+      width: 100%;
+      background: var(--whatsapp);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      padding: 16px 24px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-whatsapp-order:hover { background: #1ebe5d; }
+
+    /* ── FLOATING CART ── */
+    .floating-cart {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      padding: 14px 28px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(26,122,74,0.4);
+      z-index: 50;
+      white-space: nowrap;
+      transition: transform 0.2s;
+    }
+
+    .floating-cart.visible { display: flex; }
+    .floating-cart:hover { transform: translateX(-50%) translateY(-2px); }
+
+    .floating-cart-badge {
+      background: var(--yellow);
+      color: var(--dark);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+    }
+
+    /* ── PRODUCT MODAL ── */
+    .product-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,26,19,0.6);
+      z-index: 200;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .product-overlay.open { display: flex; }
+
+    .product-modal {
+      background: var(--white);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 0 0 40px;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-photo {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      background: var(--green-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    .modal-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-body { padding: 20px 20px 0; }
+
+    .modal-name {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .modal-price {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .modal-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      padding: 0 20px;
+    }
+
+    .btn-add-cart {
+      flex: 1;
+      background: var(--green-pale);
+      color: var(--green);
+      border: none;
+      border-radius: 100px;
+      padding: 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .btn-add-cart:hover { background: var(--green); color: white; }
+
+    .btn-order-now {
+      flex: 1;
+      background: var(--whatsapp);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      padding: 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .btn-order-now:hover { background: #1ebe5d; }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.4);
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-photo-wrap { position: relative; }
+
+    /* ── FOOTER ── */
+    .verified-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--verified-pale); color: var(--verified);
+      border-radius: 100px; padding: 4px 12px;
+      font-size: 0.72rem; font-weight: 700; margin-top: 8px;
+    }
+
+    .report-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: 1px solid var(--border);
+      border-radius: 100px; padding: 6px 14px;
+      font-size: 0.75rem; font-weight: 600; color: var(--muted);
+      cursor: pointer; font-family: inherit; margin-top: 8px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .report-btn:hover { border-color: #c0392b; color: #c0392b; }
+
+    .shop-footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    .shop-footer a {
+      color: var(--green);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 360px) {
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADING -->
+  <div id="loadingScreen">
+    <div class="spinner"></div>
+    <p>Loading shop...</p>
+  </div>
+
+  <!-- NOT FOUND -->
+  <div id="notFound">
+    <div class="emoji">🔍</div>
+    <h2>Shop not found</h2>
+    <p>This shop may have moved or is no longer active.</p>
+    <a href="https://dukaflyer.com">Open your own shop on DukaFlyer →</a>
+  </div>
+
+  <!-- MANUALLY DEACTIVATED -->
+  <div id="inactiveScreen">
+    <div class="emoji">🚫</div>
+    <h2>Shop unavailable</h2>
+    <p>This shop is currently not accepting orders.</p>
+    <a href="https://dukaflyer.com">Browse other shops on DukaFlyer →</a>
+  </div>
+
+  <!-- TRIAL/SUBSCRIPTION ENDED, NOT YET (RE)ACTIVATED -->
+  <div id="trialExpiredScreen">
+    <div class="emoji">⏳</div>
+    <h2>This shop is between subscriptions</h2>
+    <p>The owner needs to activate or renew to keep taking orders. Check back soon!</p>
+    <a href="https://dukaflyer.com">Browse other shops on DukaFlyer →</a>
+  </div>
+
+  <!-- SHOP CONTENT -->
+  <div id="shopContent">
+
+    <!-- HEADER -->
+    <div class="shop-header">
+      <div class="shop-header-top">
+        <div class="powered-by">Powered by <span>DukaFlyer</span></div>
+        <button class="cart-btn" onclick="openCart()">
+          🛒 Cart <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+      <div class="shop-avatar" id="shopAvatar">🏪</div>
+      <div class="shop-name" id="shopNameDisplay"></div>
+      <div class="shop-meta">
+        <span class="shop-tag" id="shopRegion"></span>
+        <span class="shop-tag" id="shopCategory"></span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px;flex-wrap:wrap">
+        <span class="verified-badge" id="verifiedBadge" style="display:none">✓ Verified Shop</span>
+        <button class="report-btn" onclick="reportShop()">⚑ Report a problem</button>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-bar-wrap">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()" />
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <!-- STATS -->
+      <div class="shop-stats">
+        <div class="stat">
+          <div class="stat-num" id="productCountStat">0</div>
+          <div class="stat-label">Products</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">✓</div>
+          <div class="stat-label">Verified Shop</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">UG</div>
+          <div class="stat-label">Nationwide</div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="products-header">
+        <div class="products-title">All Products</div>
+        <div class="products-count" id="productsCount"></div>
+      </div>
+
+      <div class="products-grid" id="productsGrid"></div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="shop-footer">
+      <p>Powered by <a href="https://dukaflyer.com">DukaFlyer</a> · Open your own shop for UGX 20,000/month</p>
+    </div>
+
+  </div>
+
+  <!-- CART OVERLAY -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-handle"></div>
+    <div class="cart-title">Your Cart</div>
+    <div id="cartItems"></div>
+    <div id="cartFooter"></div>
+  </div>
+
+  <!-- FLOATING CART -->
+  <button class="floating-cart" id="floatingCart" onclick="openCart()">
+    🛒 View Cart <span class="floating-cart-badge" id="floatingCartCount">0</span>
+  </button>
+
+  <!-- PRODUCT MODAL -->
+  <div class="product-overlay" id="productOverlay" onclick="handleProductOverlayClick(event)">
+    <div class="product-modal" id="productModal">
+      <div class="modal-photo-wrap">
+        <div class="modal-photo" id="modalPhoto"></div>
+        <button class="modal-close-btn" onclick="closeProductModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-name" id="modalName"></div>
+        <div class="modal-price" id="modalPrice"></div>
+        <div class="modal-desc" id="modalDesc"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-add-cart" id="modalAddCart" onclick="addToCartFromModal()">+ Add to Cart</button>
+        <button class="btn-order-now" onclick="orderNowFromModal()">WhatsApp Order</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYEQQMbfR_YHq5nISaFRgZ0SOuAHWHWWU",
+      authDomain: "dukaflyer-ea62e.firebaseapp.com",
+      projectId: "dukaflyer-ea62e",
+      storageBucket: "dukaflyer-ea62e.firebasestorage.app",
+      messagingSenderId: "149788171032",
+      appId: "1:149788171032:web:2ddeb453162284eed8dc6d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let shopData = null;
+    let allProducts = [];
+    let cart = [];
+    let activeProduct = null;
+
+    // Get slug from URL: /shop/slug-name
+    function getSlugFromURL() {
+      const path = window.location.pathname;
+      const parts = path.split('/');
+      // expects /shop/slug
+      const shopIndex = parts.indexOf('shop');
+      if (shopIndex !== -1 && parts[shopIndex + 1]) {
+        return parts[shopIndex + 1];
+      }
+      return null;
+    }
+
+    async function loadShop() {
+      const slug = getSlugFromURL();
+
+      if (!slug) {
+        showNotFound();
+        return;
+      }
+
+      try {
+        // Look up slug → uid
+        const slugDoc = await getDoc(doc(db, "slugs", slug));
+        if (!slugDoc.exists()) {
+          showNotFound();
+          return;
+        }
+
+        const { uid } = slugDoc.data();
+
+        // Load shop
+        const shopDoc = await getDoc(doc(db, "shops", uid));
+        if (!shopDoc.exists()) {
+          showNotFound();
+          return;
+        }
+
+        shopData = shopDoc.data();
+
+        // Manual deactivation (you tapped "Deactivate" — banned/paused for any reason)
+        if (shopData.status === 'inactive') {
+          showInactive();
+          return;
+        }
+
+        // Automatic lock: covers both the initial free trial ending AND a
+        // paid 30-day subscription lapsing — either way, if the relevant
+        // end date has passed and you haven't re-activated, lock the shop.
+        // No more relying on manually remembering to tap Deactivate.
+        const now = new Date();
+        if (shopData.status === 'active') {
+          if (shopData.subscriptionEndsAt) {
+            const subEnd = shopData.subscriptionEndsAt.toDate
+              ? shopData.subscriptionEndsAt.toDate()
+              : new Date(shopData.subscriptionEndsAt);
+            if (subEnd < now) {
+              showTrialExpired();
+              return;
+            }
+          }
+        } else if (shopData.trialEndsAt) {
+          const trialEnd = shopData.trialEndsAt.toDate
+            ? shopData.trialEndsAt.toDate()
+            : new Date(shopData.trialEndsAt);
+          if (trialEnd < now) {
+            showTrialExpired();
+            return;
+          }
+        }
+
+        allProducts = shopData.products || [];
+
+
+        // Track this view
+        try {
+          await addDoc(collection(db, 'views'), {
+            slug: shopData.slug,
+            uid: shopData.uid,
+            category: shopData.category || 'Other',
+            region: shopData.region || 'Unknown',
+            viewedAt: new Date().toISOString()
+          });
+        } catch(e) { /* silent fail */ }
+
+        renderShop();
+
+      } catch (err) {
+        console.error(err);
+        showNotFound();
+      }
+    }
+
+    function showNotFound() {
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('notFound').classList.add('show');
+    }
+
+    function showInactive() {
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('inactiveScreen').classList.add('show');
+    }
+
+    function showTrialExpired() {
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('trialExpiredScreen').classList.add('show');
+    }
+
+    function formatPrice(price) {
+      return 'UGX ' + Number(price).toLocaleString();
+    }
+
+    // Track real order intent — every time a buyer actually taps through to
+    // WhatsApp to order, not just page views. Fails silently so it never
+    // blocks the actual WhatsApp order from opening.
+    async function trackWhatsAppClick(context) {
+      try {
+        await addDoc(collection(db, 'whatsappClicks'), {
+          slug: shopData.slug,
+          uid: shopData.uid,
+          shopName: shopData.shopName,
+          context: context, // 'cart' or 'single-product'
+          clickedAt: new Date().toISOString()
+        });
+      } catch (e) { /* silent fail — never block the order */ }
+    }
+
+    function renderShop() {
+      // Set page title
+      document.title = shopData.shopName + ' — DukaFlyer';
+
+      // Header
+      document.getElementById('shopNameDisplay').textContent = shopData.shopName;
+      document.getElementById('shopRegion').textContent = '📍 ' + shopData.region;
+      document.getElementById('shopCategory').textContent = shopData.category;
+      document.getElementById('shopAvatar').textContent = shopData.shopName[0].toUpperCase();
+
+      // Stats
+      document.getElementById('productCountStat').textContent = allProducts.length;
+      document.getElementById('productsCount').textContent = allProducts.length + ' items';
+
+      renderProducts(allProducts);
+
+      // Show
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('shopContent').classList.add('show');
+    }
+
+    function renderProducts(products) {
+      const grid = document.getElementById('productsGrid');
+
+      if (products.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1">
+            <div class="emoji">📦</div>
+            <p>No products found</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = products.map(p => `
+        <div class="product-card" onclick="openProduct('${p.id}')">
+          <div class="product-photo">
+            ${p.photoURL
+              ? `<img src="${p.photoURL}" alt="${p.name}" loading="lazy" />`
+              : '📦'}
+          </div>
+          <div class="product-info">
+            <div class="product-name">${p.name}</div>
+            <div class="product-price">${formatPrice(p.price)} <span>UGX</span></div>
+            <button class="add-btn ${isInCart(p.id) ? 'added' : ''}"
+              onclick="event.stopPropagation(); quickAdd('${p.id}')"
+              id="addbtn-${p.id}">
+              ${isInCart(p.id) ? '✓ Added' : '+ Add to cart'}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Search
+    window.filterProducts = function() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allProducts.filter(p =>
+        p.name.toLowerCase().includes(query) ||
+        (p.description || '').toLowerCase().includes(query)
+      );
+      document.getElementById('productsCount').textContent = filtered.length + ' items';
+      renderProducts(filtered);
+    };
+
+    // Cart logic
+    function isInCart(id) {
+      return cart.some(i => i.id === id);
+    }
+
+    function getProduct(id) {
+      return allProducts.find(p => p.id === id);
+    }
+
+    window.quickAdd = function(id) {
+      const product = getProduct(id);
+      if (!product) return;
+      if (!isInCart(id)) {
+        cart.push({ ...product, qty: 1 });
+      }
+      updateCartUI();
+      const btn = document.getElementById('addbtn-' + id);
+      if (btn) { btn.textContent = '✓ Added'; btn.classList.add('added'); }
+    };
+
+    function updateCartUI() {
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cartCount').textContent = total;
+      document.getElementById('floatingCartCount').textContent = total;
+      const fc = document.getElementById('floatingCart');
+      fc.classList.toggle('visible', total > 0);
+    }
+
+    window.openCart = function() {
+      renderCartDrawer();
+      document.getElementById('cartOverlay').classList.add('open');
+      document.getElementById('cartDrawer').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeCart = function() {
+      document.getElementById('cartOverlay').classList.remove('open');
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    function renderCartDrawer() {
+      const itemsEl = document.getElementById('cartItems');
+      const footerEl = document.getElementById('cartFooter');
+
+      if (cart.length === 0) {
+        itemsEl.innerHTML = `<div class="cart-empty">Your cart is empty.<br>Add products to order.</div>`;
+        footerEl.innerHTML = '';
+        return;
+      }
+
+      itemsEl.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div class="cart-item-photo">
+            ${item.photoURL ? `<img src="${item.photoURL}" alt="${item.name}" />` : '📦'}
+          </div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${formatPrice(item.price * item.qty)}</div>
+          </div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+          </div>
+        </div>
+      `).join('');
+
+      const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+
+      footerEl.innerHTML = `
+        <div class="cart-total">
+          <span class="cart-total-label">Total</span>
+          <span class="cart-total-amount">${formatPrice(total)}</span>
+        </div>
+        <button class="btn-whatsapp-order" onclick="sendWhatsAppOrder()">
+          📲 Send Order on WhatsApp
+        </button>`;
+    }
+
+    window.changeQty = function(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== id);
+        // Reset button
+        const btn = document.getElementById('addbtn-' + id);
+        if (btn) { btn.textContent = '+ Add to cart'; btn.classList.remove('added'); }
+      }
+      updateCartUI();
+      renderCartDrawer();
+    };
+
+    window.sendWhatsAppOrder = function() {
+      if (cart.length === 0) return;
+      const lines = cart.map(i => `• ${i.name} x${i.qty} — ${formatPrice(i.price * i.qty)}`).join('\n');
+      const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      const msg = encodeURIComponent(
+        `Hi ${shopData.shopName}! I found your shop on DukaFlyer and I'd like to order:\n\n${lines}\n\nTotal: ${formatPrice(total)}\n\nIs this available?`
+      );
+      trackWhatsAppClick('cart');
+      window.open(`https://wa.me/${shopData.whatsapp}?text=${msg}`, '_blank');
+    };
+
+    // Product modal
+    window.openProduct = function(id) {
+      const p = getProduct(id);
+      if (!p) return;
+      activeProduct = p;
+
+      document.getElementById('modalPhoto').innerHTML = p.photoURL
+        ? `<img src="${p.photoURL}" alt="${p.name}" />`
+        : '📦';
+      document.getElementById('modalName').textContent = p.name;
+      document.getElementById('modalPrice').textContent = formatPrice(p.price);
+      document.getElementById('modalDesc').textContent = p.description || 'No description provided.';
+
+      document.getElementById('productOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeProductModal = function() {
+      document.getElementById('productOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+      activeProduct = null;
+    };
+
+    window.handleProductOverlayClick = function(e) {
+      if (e.target === document.getElementById('productOverlay')) closeProductModal();
+    };
+
+    window.addToCartFromModal = function() {
+      if (!activeProduct) return;
+      quickAdd(activeProduct.id);
+      closeProductModal();
+    };
+
+    window.orderNowFromModal = function() {
+      if (!activeProduct) return;
+      const p = activeProduct;
+      const msg = encodeURIComponent(
+        `Hi ${shopData.shopName}! I found your shop on DukaFlyer.\n\nI'd like to order:\n• ${p.name} — ${formatPrice(p.price)}\n\nIs it available?`
+      );
+      trackWhatsAppClick('single-product');
+      window.open(`https://wa.me/${shopData.whatsapp}?text=${msg}`, '_blank');
+    };
+
+    // Report shop
+    window.reportShop = function() {
+      const msg = encodeURIComponent(
+        'Hi DukaFlyer, I want to report a problem with this shop:\n\n' +
+        'Shop name: ' + (shopData ? shopData.shopName : 'Unknown') + '\n' +
+        'Shop link: dukaflyer.com/shop/' + (shopData ? shopData.slug : '') + '\n\n' +
+        'Problem description: '
+      );
+      window.open('https://wa.me/256769396906?text=' + msg, '_blank');
+    };
+
+    // Init
+    loadShop();
+  </script>
+
+</body>
+</html>
