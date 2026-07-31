@@ -26,16 +26,202 @@
     .btn-signin:hover { border-color: white; background: rgba(255,255,255,0.1); }
     .btn-create { background: var(--yellow); color: var(--dark); border: none; border-radius: 100px; padding: 8px 16px; font-size: 0.82rem; font-weight: 800; cursor: pointer; font-family: inherit; text-decoration: none; transition: opacity 0.2s; }
     .btn-create:hover { opacity: 0.9; }
-    .hero { background: linear-gradient(135deg, var(--dark) 0%, #1a3a2a 100%); padding: 36px 20px 100px; text-align: center; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(245,200,0,0.15); border: 1px solid rgba(245,200,0,0.3); color: var(--yellow); border-radius: 100px; padding: 5px 14px; font-size: 0.75rem; font-weight: 700; margin-bottom: 14px; letter-spacing: 0.5px; }
-    .hero h1 { font-size: clamp(1.8rem, 6vw, 2.8rem); font-weight: 800; color: white; letter-spacing: -1px; margin-bottom: 10px; line-height: 1.15; }
+    .hero { background: linear-gradient(135deg, var(--dark) 0%, #1a3a2a 100%); padding: 30px 20px 40px; text-align: center; }
+    .hero h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); font-weight: 800; color: white; letter-spacing: -1px; margin-bottom: 8px; line-height: 1.15; }
     .hero h1 span { color: var(--yellow); }
-    .hero p { font-size: 0.92rem; color: rgba(255,255,255,0.6); max-width: 400px; margin: 0 auto 24px; line-height: 1.6; }
+    .hero p { font-size: 0.9rem; color: rgba(255,255,255,0.6); max-width: 400px; margin: 0 auto 16px; line-height: 1.6; }
     .hero-stats { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
     .hero-stat { text-align: center; }
-    .hero-stat-num { font-size: 1.4rem; font-weight: 800; color: var(--yellow); letter-spacing: -0.5px; }
-    .hero-stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.5); font-weight: 500; }
-    .search-wrap { max-width: 680px; margin: -36px auto 0; padding: 0 16px; position: relative; z-index: 10; }
+    .hero-stat-num { font-size: 1.2rem; font-weight: 800; color: var(--yellow); letter-spacing: -0.5px; }
+    .hero-stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.5); font-weight: 500; }
+
+    /* ----- Inline Duka Chat ----- */
+    .duka-inline {
+      max-width: 680px;
+      margin: 16px auto 24px;
+      padding: 0 16px;
+    }
+    .duka-inline .duka-header {
+      background: var(--dark);
+      color: white;
+      padding: 12px 16px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .duka-inline .duka-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background-color: var(--green-pale);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='36' r='19' fill='%23a5673f'/%3E%3Cpath d='M11 33 Q11 8 32 8 Q53 8 53 33 Q53 17 32 15 Q11 17 11 33 Z' fill='%232b1a12'/%3E%3Crect x='16' y='32' width='14' height='9' rx='3' fill='%230f1a13'/%3E%3Crect x='34' y='32' width='14' height='9' rx='3' fill='%230f1a13'/%3E%3Cline x1='30' y1='35' x2='34' y2='35' stroke='%230f1a13' stroke-width='2'/%3E%3Cpath d='M22 47 Q32 54 42 47' stroke='%230f1a13' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: center;
+    }
+    .duka-inline .duka-header-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+    .duka-inline .duka-header-sub {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.6);
+      margin-left: auto;
+    }
+    .duka-inline .duka-body {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+      padding: 12px 14px;
+      min-height: 200px;
+      max-height: 380px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .duka-inline .duka-body .duka-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      align-self: flex-start;
+      max-width: 88%;
+    }
+    .duka-inline .duka-body .duka-avatar-sm {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background-color: var(--green-pale);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='36' r='19' fill='%23a5673f'/%3E%3Cpath d='M11 33 Q11 8 32 8 Q53 8 53 33 Q53 17 32 15 Q11 17 11 33 Z' fill='%232b1a12'/%3E%3Crect x='16' y='32' width='14' height='9' rx='3' fill='%230f1a13'/%3E%3Crect x='34' y='32' width='14' height='9' rx='3' fill='%230f1a13'/%3E%3Cline x1='30' y1='35' x2='34' y2='35' stroke='%230f1a13' stroke-width='2'/%3E%3Cpath d='M22 47 Q32 54 42 47' stroke='%230f1a13' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: center;
+      margin-top: 2px;
+    }
+    .duka-inline .duka-msg {
+      padding: 8px 12px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .duka-inline .duka-msg.bot {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--dark);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .duka-inline .duka-msg.user {
+      background: var(--green);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .duka-inline .duka-input-area {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .duka-inline .duka-input-area input {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+    }
+    .duka-inline .duka-input-area input:focus {
+      border-color: var(--green);
+    }
+    .duka-inline .duka-input-area button {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      padding: 0 20px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+    .duka-inline .duka-input-area button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .duka-inline .duka-examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .duka-inline .duka-examples .example-chip {
+      background: var(--green-pale);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--green);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .duka-inline .duka-examples .example-chip:hover {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+    .duka-inline .duka-typing {
+      align-self: flex-start;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      border-bottom-left-radius: 4px;
+      padding: 8px 12px;
+      display: flex;
+      gap: 4px;
+    }
+    .duka-inline .duka-typing span {
+      width: 6px;
+      height: 6px;
+      background: var(--muted);
+      border-radius: 50%;
+      animation: dukaTyping 1.2s ease-in-out infinite;
+    }
+    .duka-inline .duka-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .duka-inline .duka-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dukaTyping { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+    .duka-inline .duka-gate {
+      align-self: center;
+      text-align: center;
+      background: var(--green-pale);
+      border-radius: 14px;
+      padding: 12px 16px;
+      max-width: 92%;
+    }
+    .duka-inline .duka-gate p {
+      font-size: 0.82rem;
+      color: var(--dark);
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .duka-inline .duka-gate button {
+      background: var(--yellow);
+      color: var(--dark);
+      border: none;
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .search-wrap { max-width: 680px; margin: 0 auto; padding: 0 16px; }
     .search-box { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(15,26,19,0.15); padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
     .search-box input { flex: 1; border: none; outline: none; font-size: 0.95rem; font-family: inherit; color: var(--dark); background: transparent; }
     .search-box input::placeholder { color: var(--muted); }
@@ -77,6 +263,7 @@
     .btn-cta-primary { background: var(--yellow); color: var(--dark); border: none; border-radius: 100px; padding: 13px 24px; font-size: 0.88rem; font-weight: 800; cursor: pointer; font-family: inherit; text-decoration: none; transition: opacity 0.2s; }
     .btn-cta-primary:hover { opacity: 0.9; }
     .btn-cta-secondary { background: none; color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 100px; padding: 13px 24px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; text-decoration: none; }
+
     #loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 999; }
     #loadingScreen p { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
     .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; }
@@ -94,57 +281,13 @@
     .modal-close { background: none; border: none; font-size: 0.82rem; color: var(--muted); cursor: pointer; font-family: inherit; }
     .error-msg { background: #fff0f0; color: #c0392b; border-radius: 10px; padding: 10px 14px; font-size: 0.82rem; margin-bottom: 12px; display: none; text-align: left; }
     .error-msg.show { display: block; }
+
     footer { text-align: center; padding: 24px 16px; font-size: 0.78rem; color: var(--muted); border-top: 1px solid var(--border); }
     footer a { color: var(--green); text-decoration: none; font-weight: 600; }
     .partners-strip { border-top: 1px solid var(--border); padding: 20px 16px; text-align: center; }
     .partners-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
     .partners-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 22px; }
     .partner-name { font-size: 0.8rem; font-weight: 700; color: var(--mid); }
-
-    /* Duka widget */
-    #dukaFab { position: fixed; bottom: 20px; right: 20px; z-index: 150; background: var(--green); color: white; border: none; border-radius: 100px; padding: 13px 18px; display: flex; align-items: center; gap: 8px; font-family: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; box-shadow: 0 6px 20px rgba(26,122,74,0.35); transition: transform 0.15s; }
-    #dukaFab:hover { transform: translateY(-2px); }
-    #dukaFab .dot { width: 8px; height: 8px; background: var(--yellow); border-radius: 50%; animation: dukaPulse 1.6s ease-in-out infinite; }
-    @keyframes dukaPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-    #dukaPanel { position: fixed; z-index: 160; background: white; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 12px 40px rgba(15,26,19,0.25); }
-    #dukaPanel.open { display: flex; }
-    @media (min-width: 560px) {
-      #dukaPanel { bottom: 90px; right: 20px; width: 380px; height: 560px; border-radius: 20px; border: 1px solid var(--border); }
-    }
-    @media (max-width: 559px) {
-      #dukaPanel { bottom: 0; left: 0; right: 0; height: 82vh; border-radius: 20px 20px 0 0; }
-    }
-    .duka-header { background: var(--dark); color: white; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-    .duka-header-title { font-size: 0.92rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-    .duka-avatar { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; background-color: var(--green-pale); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='36' r='19' fill='%23a5673f'/%3E%3Cpath d='M11 33 Q11 8 32 8 Q53 8 53 33 Q53 17 32 15 Q11 17 11 33 Z' fill='%232b1a12'/%3E%3Crect x='16' y='32' width='14' height='9' rx='3' fill='%230f1a13'/%3E%3Crect x='34' y='32' width='14' height='9' rx='3' fill='%230f1a13'/%3E%3Cline x1='30' y1='35' x2='34' y2='35' stroke='%230f1a13' stroke-width='2'/%3E%3Cpath d='M22 47 Q32 54 42 47' stroke='%230f1a13' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-size: cover; background-position: center; }
-    .duka-avatar-sm { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; background-color: var(--green-pale); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='36' r='19' fill='%23a5673f'/%3E%3Cpath d='M11 33 Q11 8 32 8 Q53 8 53 33 Q53 17 32 15 Q11 17 11 33 Z' fill='%232b1a12'/%3E%3Crect x='16' y='32' width='14' height='9' rx='3' fill='%230f1a13'/%3E%3Crect x='34' y='32' width='14' height='9' rx='3' fill='%230f1a13'/%3E%3Cline x1='30' y1='35' x2='34' y2='35' stroke='%230f1a13' stroke-width='2'/%3E%3Cpath d='M22 47 Q32 54 42 47' stroke='%230f1a13' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-size: cover; background-position: center; margin-top: 2px; }
-    .duka-row { display: flex; gap: 8px; align-items: flex-end; align-self: flex-start; max-width: 88%; }
-    .duka-switch-btn { background: none; border: none; color: rgba(255,255,255,0.75); font-size: 0.72rem; font-weight: 600; cursor: pointer; font-family: inherit; padding: 4px 6px; margin-right: 2px; }
-    .duka-switch-btn:hover { color: white; }
-    .duka-header-title .badge { width: 8px; height: 8px; background: var(--yellow); border-radius: 50%; }
-    .duka-close { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 1.2rem; cursor: pointer; line-height: 1; padding: 4px; }
-    .duka-close:hover { color: white; }
-    .duka-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
-    .duka-msg { max-width: 82%; padding: 10px 13px; border-radius: 14px; font-size: 0.85rem; line-height: 1.5; }
-    .duka-msg.bot { background: white; border: 1px solid var(--border); color: var(--dark); align-self: flex-start; border-bottom-left-radius: 4px; }
-    .duka-msg.user { background: var(--green); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-    .duka-quick-replies { display: flex; flex-direction: column; gap: 8px; align-self: flex-start; max-width: 88%; }
-    .duka-quick-btn { background: white; border: 1.5px solid var(--green); color: var(--green); border-radius: 100px; padding: 9px 16px; font-size: 0.82rem; font-weight: 700; cursor: pointer; font-family: inherit; text-align: left; transition: all 0.15s; }
-    .duka-quick-btn:hover { background: var(--green); color: white; }
-    .duka-typing { align-self: flex-start; background: white; border: 1px solid var(--border); border-radius: 14px; border-bottom-left-radius: 4px; padding: 10px 14px; display: flex; gap: 4px; }
-    .duka-typing span { width: 6px; height: 6px; background: var(--muted); border-radius: 50%; animation: dukaTyping 1.2s ease-in-out infinite; }
-    .duka-typing span:nth-child(2) { animation-delay: 0.2s; }
-    .duka-typing span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes dukaTyping { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
-    .duka-gate { align-self: center; text-align: center; background: var(--green-pale); border-radius: 14px; padding: 14px 16px; max-width: 92%; }
-    .duka-gate p { font-size: 0.82rem; color: var(--dark); margin-bottom: 10px; line-height: 1.5; }
-    .duka-gate button { background: var(--yellow); color: var(--dark); border: none; border-radius: 100px; padding: 9px 18px; font-size: 0.8rem; font-weight: 800; cursor: pointer; font-family: inherit; }
-    .duka-footer { border-top: 1px solid var(--border); padding: 10px; display: flex; gap: 8px; flex-shrink: 0; background: white; }
-    .duka-footer input { flex: 1; border: 1.5px solid var(--border); border-radius: 100px; padding: 9px 14px; font-size: 0.85rem; font-family: inherit; outline: none; }
-    .duka-footer input:focus { border-color: var(--green); }
-    .duka-footer button { background: var(--green); color: white; border: none; border-radius: 100px; width: 38px; height: 38px; flex-shrink: 0; cursor: pointer; font-size: 1rem; }
-    .duka-footer button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .duka-footer.hidden { display: none; }
   </style>
 </head>
 <body>
@@ -183,11 +326,32 @@
 
   <div class="hero">
     <h1>Build Your Shop.<br>Sell on <span>WhatsApp</span>.</h1>
-    <p>Create your own online shop in 5 minutes, free to start. Or browse shops already selling across Uganda and Globally.</p>
+    <p>Create your online shop in 5 minutes, free to start. Or browse shops already selling across Uganda and the Globe.</p>
     <div class="hero-stats">
       <div class="hero-stat"><div class="hero-stat-num" id="statShops">—</div><div class="hero-stat-label">Active Shops</div></div>
       <div class="hero-stat"><div class="hero-stat-num" id="statCategories">—</div><div class="hero-stat-label">Categories</div></div>
       <div class="hero-stat"><div class="hero-stat-num">UGX</div><div class="hero-stat-label">MoMo Friendly</div></div>
+    </div>
+  </div>
+
+  <!-- Inline Duka Chat -->
+  <div class="duka-inline">
+    <div class="duka-header">
+      <span class="duka-avatar"></span>
+      <span class="duka-header-title">Ask Duka</span>
+      <span class="duka-header-sub">Business advice for Uganda</span>
+    </div>
+    <div class="duka-body" id="dukaBody">
+      <!-- messages and examples rendered by JS -->
+    </div>
+    <div class="duka-input-area">
+      <input type="text" id="dukaInput" placeholder="Ask Duka anything..." onkeydown="if(event.key==='Enter') sendDuka()" />
+      <button id="dukaSendBtn" onclick="sendDuka()">Send</button>
+    </div>
+    <div class="duka-examples">
+      <button class="example-chip" onclick="sendExample('business', 'Netagisaki okutandika business mu Uganda?')"> Netagisaki okutandika business?</button>
+      <button class="example-chip" onclick="sendExample('business', 'Is 2 million UGX enough to import from China?')">Is 2M UGX enough to import from China?</button>
+      <button class="example-chip" onclick="sendExample('shop', 'I want to build a shop on DukaFlyer')"> Build my shop</button>
     </div>
   </div>
 
@@ -224,29 +388,12 @@
     <div class="shops-grid" id="shopsGrid"></div>
 
     <div class="cta-banner">
-      <h2>Sell to all of Uganda </h2>
+      <h2>Sell to all of Uganda and the Globe</h2>
       <p>Create your own shop in 5 minutes. Share your link. Receive orders on WhatsApp. First 7 days free.</p>
       <div class="cta-banner-btns">
         <a class="btn-cta-primary" id="ctaCreate" href="#">+ Create Your Shop</a>
         <a class="btn-cta-secondary" href="https://wa.me/256769396906" target="_blank">💬 Talk to Us</a>
       </div>
-    </div>
-  </div>
-
-  <button id="dukaFab" onclick="toggleDuka()"><span class="dot"></span> Talk to Duka</button>
-
-  <div id="dukaPanel">
-    <div class="duka-header">
-      <div class="duka-header-title"><span class="duka-avatar"></span> Duka</div>
-      <div style="display:flex;align-items:center;">
-        <button class="duka-switch-btn" onclick="switchDukaTopic()">⇄ Switch topic</button>
-        <button class="duka-close" onclick="toggleDuka()">✕</button>
-      </div>
-    </div>
-    <div class="duka-body" id="dukaBody"></div>
-    <div class="duka-footer" id="dukaFooter">
-      <input type="text" id="dukaInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendDuka()" />
-      <button id="dukaSendBtn" onclick="sendDuka()">➤</button>
     </div>
   </div>
 
@@ -286,7 +433,12 @@
 
     let allShops = [];
     let activeCategory = '';
-    let dukaMerchantShop = null; // the signed-in user's own shop data, if any
+    let dukaMerchantShop = null;
+    let dukaMode = 'business'; // default
+    let dukaHistory = [];
+    let dukaMsgCount = 0;
+    let dukaBusy = false;
+    const DUKA_LIMIT = 3;
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -299,8 +451,6 @@
         document.getElementById('navCreate').onclick = null;
         document.getElementById('ctaCreate').onclick = null;
 
-        // Fetch the signed-in merchant's own shop, so Duka can give
-        // grounded advice instead of generic answers.
         try {
           const shopSnap = await getDoc(doc(db, 'shops', user.uid));
           dukaMerchantShop = shopSnap.exists() ? shopSnap.data() : null;
@@ -314,8 +464,10 @@
         dukaMerchantShop = null;
       }
       await loadShops();
+      initDuka();
     });
 
+    // ----- Shops -----
     async function loadShops() {
       try {
         const snap = await getDocs(collection(db, 'shops'));
@@ -394,6 +546,7 @@
       renderShops(filtered);
     };
 
+    // ----- Auth modals -----
     window.signInWithGoogle = async function() {
       const btn = document.getElementById('googleBtn');
       const errorMsg = document.getElementById('errorMsg');
@@ -413,29 +566,20 @@
     window.closeModal = function() { document.getElementById('modalOverlay').classList.remove('active'); document.body.style.overflow = ''; };
     window.handleOverlayClick = function(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); };
 
-    // ---------- Duka widget ----------
-    const DUKA_LIMIT = 3; // free messages before sign-in gate
-    let dukaMode = null;
-    let dukaHistory = [];
-    let dukaMsgCount = 0;
-    let dukaOpened = false;
-    let dukaBusy = false;
-
-    window.toggleDuka = function() {
-      const panel = document.getElementById('dukaPanel');
-      panel.classList.toggle('open');
-      if (panel.classList.contains('open') && !dukaOpened) {
-        dukaOpened = true;
-        dukaGreet();
-      }
-    };
-
-    function dukaScroll() {
+    // ----- Inline Duka Chat -----
+    function initDuka() {
       const body = document.getElementById('dukaBody');
-      body.scrollTop = body.scrollHeight;
+      // Clear any existing content
+      body.innerHTML = '';
+      if (dukaMerchantShop && dukaMerchantShop.shopName) {
+        addDukaMessage(`Hey! 👋 Good to see you, ${dukaMerchantShop.shopName}. Ask me anything about business or your shop.`, 'bot');
+      } else {
+        addDukaMessage("Hey! 👋 I'm Duka. Ask me anything about starting or growing your business in Uganda.", 'bot');
+      }
+      // Add example chips are already in HTML; they call sendExample.
     }
 
-    function dukaAddBubble(text, who) {
+    function addDukaMessage(text, who) {
       const body = document.getElementById('dukaBody');
       if (who === 'bot') {
         const row = document.createElement('div');
@@ -454,106 +598,83 @@
         div.textContent = text;
         body.appendChild(div);
       }
-      dukaScroll();
+      body.scrollTop = body.scrollHeight;
     }
 
-    function dukaShowModeButtons() {
-      const body = document.getElementById('dukaBody');
-      const wrap = document.createElement('div');
-      wrap.className = 'duka-quick-replies';
-      wrap.id = 'dukaQuickReplies';
-      wrap.innerHTML = `
-        <button class="duka-quick-btn" onclick="selectDukaMode('shop')">🏪 Build a shop</button>
-        <button class="duka-quick-btn" onclick="selectDukaMode('business')">💼 Talk business</button>`;
-      body.appendChild(wrap);
-      dukaScroll();
-      document.getElementById('dukaFooter').classList.add('hidden');
-    }
-
-    function dukaGreet() {
-      if (dukaMerchantShop && dukaMerchantShop.shopName) {
-        dukaAddBubble(`Hey! 👋 Good to see you, ${dukaMerchantShop.shopName}. Want to build another shop, or talk about how ${dukaMerchantShop.shopName} is doing?`, 'bot');
-      } else {
-        dukaAddBubble("Hey! 👋 I'm Duka. Would you like to build a shop, or talk about your business?", 'bot');
-      }
-      dukaShowModeButtons();
-    }
-
-    window.switchDukaTopic = function() {
-      const qr = document.getElementById('dukaQuickReplies');
-      if (qr) qr.remove();
-      dukaMode = null;
-      dukaAddBubble("No problem — what would you like to do instead?", 'bot');
-      dukaShowModeButtons();
-    };
-
-    window.selectDukaMode = function(mode) {
-      dukaMode = mode;
-      const qr = document.getElementById('dukaQuickReplies');
-      if (qr) qr.remove();
-      document.getElementById('dukaFooter').classList.remove('hidden');
-      if (mode === 'shop') {
-        dukaAddBubble('Build a shop', 'user');
-        dukaAddBubble("Nice! Let's get your shop set up. What would you like to call it?", 'bot');
-      } else {
-        dukaAddBubble('Talk business', 'user');
-        dukaAddBubble("Go for it — pricing, marketing, customers, whatever's on your mind.", 'bot');
-      }
-      document.getElementById('dukaInput').focus();
-    };
-
-    function dukaShowTyping() {
+    function showTyping() {
       const body = document.getElementById('dukaBody');
       const div = document.createElement('div');
       div.className = 'duka-typing';
       div.id = 'dukaTypingIndicator';
       div.innerHTML = '<span></span><span></span><span></span>';
       body.appendChild(div);
-      dukaScroll();
+      body.scrollTop = body.scrollHeight;
     }
-    function dukaHideTyping() {
+
+    function hideTyping() {
       const el = document.getElementById('dukaTypingIndicator');
       if (el) el.remove();
     }
 
-    function dukaShowGate() {
+    function showGate() {
       const body = document.getElementById('dukaBody');
       const div = document.createElement('div');
       div.className = 'duka-gate';
       div.innerHTML = `<p>You've hit the free chat limit. Sign in free to keep talking to Duka and save your progress.</p><button onclick="dukaGateSignIn()">Sign In Free</button>`;
       body.appendChild(div);
-      document.getElementById('dukaFooter').classList.add('hidden');
-      dukaScroll();
+      body.scrollTop = body.scrollHeight;
     }
 
     window.dukaGateSignIn = function() {
-      toggleDuka();
       openModal();
     };
 
-    window.sendDuka = async function() {
-      if (dukaBusy) return;
+    window.sendExample = function(mode, text) {
+      dukaMode = mode; // set mode for this message
+      // Add user message
+      addDukaMessage(text, 'user');
+      dukaHistory.push({ role: 'user', text });
+      // Reset mode to business for subsequent messages, unless switched again
+      // But we keep the mode as set for this call
+      // After this, we'll revert to business? Actually, if they click "Build my shop", we want to stay in shop mode.
+      // So we'll keep dukaMode as set until they switch via another example or we can auto-detect.
+      // We'll just keep it as is; they can click another example to switch.
+      // We also need to increment count only for business mode? The cap applies to business mode only.
+      // But the backend knows mode. We'll just handle.
+      // For shop-building, we don't cap.
+      if (mode === 'business') dukaMsgCount++;
+      // Actually we need to respect the cap. We'll check in sendDuka.
+      // We'll just call sendDuka with the text.
+      // But we already added the message, so we need to send to backend.
+      // We'll call a function to send to backend.
+      sendToBackend(text);
+    };
+
+    window.sendDuka = function() {
       const input = document.getElementById('dukaInput');
       const text = input.value.trim();
-      if (!text) return;
+      if (!text || dukaBusy) return;
+      input.value = '';
+      // Determine mode: if text contains shop-related keywords, we might switch, but user can also use example chips.
+      // For manual input, default to business.
+      // We'll keep the current mode.
+      addDukaMessage(text, 'user');
+      dukaHistory.push({ role: 'user', text });
+      if (dukaMode === 'business') dukaMsgCount++;
+      sendToBackend(text);
+    };
 
-      // The message cap only applies to open-ended business chat.
-      // Shop-building needs several exchanges to finish (name, category,
-      // region, WhatsApp number) and already ends in a sign-in gate once
-      // the draft is ready — capping it early would cut people off before
-      // Duka has enough to save a shop draft at all.
-      if (dukaMode === 'business' && dukaMsgCount >= DUKA_LIMIT) {
-        dukaShowGate();
+    async function sendToBackend(text) {
+      if (dukaBusy) return;
+      // Check cap for business mode
+      if (dukaMode === 'business' && dukaMsgCount > DUKA_LIMIT) {
+        showGate();
         return;
       }
 
-      dukaMsgCount++;
-      input.value = '';
-      dukaAddBubble(text, 'user');
-      dukaHistory.push({ role: 'user', text });
       dukaBusy = true;
       document.getElementById('dukaSendBtn').disabled = true;
-      dukaShowTyping();
+      showTyping();
 
       try {
         const res = await fetch('https://us-central1-dukaflyer-ea62e.cloudfunctions.net/dukaAi', {
@@ -562,7 +683,7 @@
           body: JSON.stringify({
             mode: dukaMode,
             message: text,
-            history: dukaHistory,
+            history: dukaHistory.slice(-12),
             shopContext: (dukaMode === 'business' && dukaMerchantShop) ? {
               shopName: dukaMerchantShop.shopName,
               category: dukaMerchantShop.category,
@@ -574,15 +695,15 @@
           })
         });
         const data = await res.json();
-        dukaHideTyping();
+        hideTyping();
 
         if (!res.ok || data.error) {
           const msg = data.error === 'overloaded'
             ? "Ah, I've got so many people talking to me right now, my guy 😅 Give it a minute and try again."
             : "Sorry, something went wrong. Try again in a moment.";
-          dukaAddBubble(msg, 'bot');
+          addDukaMessage(msg, 'bot');
         } else {
-          dukaAddBubble(data.reply, 'bot');
+          addDukaMessage(data.reply, 'bot');
           dukaHistory.push({ role: 'assistant', text: data.reply });
 
           if (data.shopDraft) {
@@ -592,21 +713,20 @@
             div.className = 'duka-gate';
             div.innerHTML = `<p>🎉 Ready to create your shop! Sign in with Google to finish setting it up.</p><button onclick="dukaGateSignIn()">Sign In & Create Shop</button>`;
             body.appendChild(div);
-            document.getElementById('dukaFooter').classList.add('hidden');
-            dukaScroll();
+            body.scrollTop = body.scrollHeight;
           }
         }
       } catch (e) {
-        dukaHideTyping();
-        dukaAddBubble("Network hiccup — please try again.", 'bot');
+        hideTyping();
+        addDukaMessage("Network hiccup — please try again.", 'bot');
       } finally {
         dukaBusy = false;
         document.getElementById('dukaSendBtn').disabled = false;
         if (dukaMode === 'business' && dukaMsgCount >= DUKA_LIMIT) {
-          setTimeout(dukaShowGate, 400);
+          setTimeout(showGate, 400);
         }
       }
-    };
+    }
   </script>
 </body>
 </html>
