@@ -652,7 +652,7 @@
       </a>
     </div>
 
-    <!-- ─── NEW: WHATSAPP CONNECTION ─── -->
+    <!-- ─── WHATSAPP CONNECTION ─── -->
     <div class="card" style="margin-bottom:16px">
       <div class="card-title" style="margin-bottom:16px">
         <div class="card-icon">📱</div>
@@ -679,7 +679,7 @@
       </div>
     </div>
 
-    <!-- ─── NEW: DUKA LIVE ─── -->
+    <!-- ─── DUKA LIVE ─── -->
     <div class="card" style="margin-bottom:16px">
       <div class="card-title" style="margin-bottom:16px">
         <div class="card-icon">🟢</div>
@@ -700,7 +700,7 @@
       </div>
     </div>
 
-    <!-- ─── NEW: ENABLE WIDGET ─── -->
+    <!-- ─── ENABLE WIDGET ─── -->
     <div class="card" style="margin-bottom:16px;background:var(--yellow-pale);border-color:#f5d08a;">
       <div class="card-title" style="margin-bottom:8px">
         <div class="card-icon">📲</div>
@@ -861,7 +861,6 @@
         <textarea id="pDesc" placeholder="Size, colour, material..."></textarea>
       </div>
 
-      <!-- CATEGORY DROPDOWN ADDED HERE -->
       <div class="field">
         <label>Category <span class="req">*</span></label>
         <select id="pCategory">
@@ -941,6 +940,10 @@
     let modalPhotoFile = null;
     let modalExistingPhotoURL = null;
     let categories = [];
+    let dukaMerchantShop = null;
+    let dukaHistory = [];
+    let dukaOpened = false;
+    let dukaBusy = false;
 
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -1001,59 +1004,53 @@
     }
 
     function renderDashboard() {
-      // Greeting
-      const hour = new Date().getHours();
-      const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-      document.getElementById('greetingText').textContent = greet + ' ' + (shopData.ownerName?.split(' ')[0] || '') + ' 👋';
-      document.getElementById('greetingShop').textContent = shopData.shopName;
+      try {
+        const hour = new Date().getHours();
+        const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+        document.getElementById('greetingText').textContent = greet + ' ' + (shopData.ownerName?.split(' ')[0] || '') + ' 👋';
+        document.getElementById('greetingShop').textContent = shopData.shopName;
 
-      // Shop link
-      const link = `dukaflyer.com/shop/${shopData.slug}`;
-      document.getElementById('shopLinkText').textContent = link;
-      document.getElementById('viewShopBtn').href = `https://${link}`;
+        const link = `dukaflyer.com/shop/${shopData.slug}`;
+        document.getElementById('shopLinkText').textContent = link;
+        document.getElementById('viewShopBtn').href = `https://${link}`;
 
-      // Trial banner
-      renderTrialBanner();
+        renderTrialBanner();
 
-      // Stats
-      const products = shopData.products || [];
-      document.getElementById('statProducts').textContent = products.length;
+        const products = shopData.products || [];
+        document.getElementById('statProducts').textContent = products.length;
 
-      const trialEnd = shopData.trialEndsAt?.toDate ? shopData.trialEndsAt.toDate() : new Date(shopData.trialEndsAt);
-      const daysLeft = Math.max(0, Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24)));
-      document.getElementById('statDays').textContent = shopData.status === 'active' ? '∞' : daysLeft;
+        const trialEnd = shopData.trialEndsAt?.toDate ? shopData.trialEndsAt.toDate() : new Date(shopData.trialEndsAt);
+        const daysLeft = Math.max(0, Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24)));
+        document.getElementById('statDays').textContent = shopData.status === 'active' ? '∞' : daysLeft;
 
-      // Products
-      renderProducts();
+        renderProducts();
+        renderSettings();
+        checkExpiry();
+        loadAnalytics();
 
-      // Settings
-      renderSettings();
+        if (shopData.whatsappNumber) {
+          document.getElementById('whatsappInput').value = shopData.whatsappNumber;
+          document.getElementById('whatsappStatus').innerHTML = '✅ Already linked: ' + shopData.whatsappNumber;
+          const prefs = shopData.notificationPreferences || {};
+          document.getElementById('notifLowOrders').checked = prefs.lowOrders !== false;
+          document.getElementById('notifHolidays').checked = prefs.holidays !== false;
+          document.getElementById('notifPayday').checked = prefs.paydayReminders !== false;
+        }
 
-      // Check expiry
-      checkExpiry();
+        loadLiveData();
+        if (currentUser) syncWhatsAppHistory(currentUser.uid);
 
-      // Analytics
-      loadAnalytics();
+        dukaMerchantShop = shopData;
 
-      // ── NEW: Pre-fill WhatsApp fields ──
-      if (shopData.whatsappNumber) {
-        document.getElementById('whatsappInput').value = shopData.whatsappNumber;
-        document.getElementById('whatsappStatus').innerHTML = '✅ Already linked: ' + shopData.whatsappNumber;
-        const prefs = shopData.notificationPreferences || {};
-        document.getElementById('notifLowOrders').checked = prefs.lowOrders !== false;
-        document.getElementById('notifHolidays').checked = prefs.holidays !== false;
-        document.getElementById('notifPayday').checked = prefs.paydayReminders !== false;
+        console.log('✅ Dashboard rendered successfully');
+        document.getElementById('loadingScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+      } catch (error) {
+        console.error('❌ CRITICAL ERROR in renderDashboard:', error);
+        document.getElementById('loadingScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        alert('⚠️ Dashboard error! Check the console (F12) and paste the red error message to me.');
       }
-
-      // ── NEW: Load live data and sync history ──
-      loadLiveData();
-      if (currentUser) syncWhatsAppHistory(currentUser.uid);
-
-      // Duka is grounded in this merchant's real shop data
-      dukaMerchantShop = shopData;
-
-      document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('mainContent').style.display = 'block';
     }
 
     function renderTrialBanner() {
@@ -1079,7 +1076,6 @@
       }
 
       const daysLeft = Math.max(0, Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24)));
-
       banner.style.display = 'flex';
 
       if (daysLeft > 0) {
@@ -1098,7 +1094,6 @@
     function renderProducts() {
       const list = document.getElementById('productsList');
       const products = shopData.products || [];
-
       if (products.length === 0) {
         list.innerHTML = `
           <div class="empty-products">
@@ -1108,12 +1103,9 @@
           </div>`;
         return;
       }
-
       list.innerHTML = products.map(p => `
         <div class="product-item">
-          <div class="product-thumb">
-            ${p.photoURL ? `<img src="${p.photoURL}" alt="${p.name}" />` : '📦'}
-          </div>
+          <div class="product-thumb">${p.photoURL ? `<img src="${p.photoURL}" alt="${p.name}" />` : '📦'}</div>
           <div class="product-details">
             <div class="product-name">${p.name}</div>
             <div class="product-price">UGX ${Number(p.price).toLocaleString()}</div>
@@ -1126,7 +1118,268 @@
       `).join('');
     }
 
-    // ── ADD PRODUCT ──
+    function renderSettings() {
+      document.getElementById('settingsShopName').textContent = shopData.shopName || '-';
+      document.getElementById('settingsWhatsapp').textContent = '+' + (shopData.whatsapp || '-');
+      document.getElementById('settingsRegion').textContent = shopData.region || '-';
+      document.getElementById('settingsCategory').textContent = shopData.category || '-';
+    }
+
+    function checkExpiry() {
+      if (shopData.status === 'inactive') {
+        document.getElementById('paywallTitle').textContent = 'Your shop has been deactivated';
+        document.getElementById('paywallSub').textContent = 'Pay UGX 20,000 to reactivate your shop. Contact us on WhatsApp.';
+        document.getElementById('paywallScreen').style.display = 'flex';
+      }
+    }
+
+    async function loadAnalytics() {
+      try {
+        const slug = shopData.slug;
+        const viewsRef = collection(db, 'views');
+        const allQ = query(viewsRef, where('slug', '==', slug));
+        const allSnap = await getDocs(allQ);
+        const total = allSnap.size;
+
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const weekAgo = new Date(today); weekAgo.setDate(today.getDate() - 7);
+
+        let todayCount = 0, weekCount = 0;
+        allSnap.forEach(d => {
+          const ts = d.data().viewedAt?.toDate ? d.data().viewedAt.toDate() : new Date(d.data().viewedAt || 0);
+          if (ts >= today) todayCount++;
+          if (ts >= weekAgo) weekCount++;
+        });
+
+        document.getElementById('analyticsViews').textContent = total;
+        document.getElementById('analyticsToday').textContent = todayCount;
+        document.getElementById('analyticsWeek').textContent = weekCount;
+      } catch(e) { console.log('Analytics load error', e); }
+    }
+
+    // ── WHATSAPP LINKING ──
+    window.linkWhatsApp = async function() {
+      const input = document.getElementById('whatsappInput');
+      const status = document.getElementById('whatsappStatus');
+      let number = input.value.trim();
+      if (!number.startsWith('256') || number.length < 10) {
+        status.innerHTML = '⚠️ Please enter a valid Uganda number starting with 256 (e.g., 2567XXXXXXXX)';
+        return;
+      }
+      status.innerHTML = '⏳ Linking...';
+      try {
+        const user = auth.currentUser;
+        if (!user) { status.innerHTML = '⚠️ Please sign in first.'; return; }
+
+        const prefs = {
+          lowOrders: document.getElementById('notifLowOrders').checked,
+          holidays: document.getElementById('notifHolidays').checked,
+          paydayReminders: document.getElementById('notifPayday').checked
+        };
+
+        await updateDoc(doc(db, 'shops', user.uid), {
+          whatsappNumber: number,
+          whatsappOptIn: true,
+          notificationPreferences: prefs
+        });
+        status.innerHTML = '✅ WhatsApp number linked successfully! Duka will recognise you now.';
+        const snap = await getDoc(doc(db, 'shops', user.uid));
+        if (snap.exists()) {
+          shopData = snap.data();
+          renderSettings();
+        }
+      } catch(e) {
+        status.innerHTML = '❌ Error linking number. Please try again.';
+        console.error(e);
+      }
+    };
+
+    // ── SYNC WHATSAPP HISTORY ──
+    async function syncWhatsAppHistory(userId) {
+      if (!userId) return;
+      try {
+        const logsRef = collection(db, 'shops', userId, 'whatsapp_logs');
+        const q = query(logsRef, orderBy('timestamp', 'desc'), limit(20));
+        const snap = await getDocs(q);
+        const messages = [];
+        snap.forEach(doc => {
+          const data = doc.data();
+          messages.push({
+            user: data.userText,
+            reply: data.reply,
+            timestamp: data.timestamp?.toDate() || new Date()
+          });
+        });
+        messages.reverse();
+        if (messages.length === 0) return;
+
+        const body = document.getElementById('dukaBody');
+        const header = document.createElement('div');
+        header.style.cssText = 'font-size:0.7rem;color:var(--muted);text-align:center;padding:4px 0;border-bottom:1px solid var(--border);margin-bottom:6px;';
+        header.textContent = '📱 WhatsApp History';
+        body.prepend(header);
+
+        for (const msg of messages) {
+          const userDiv = document.createElement('div');
+          userDiv.className = 'duka-msg user';
+          userDiv.textContent = msg.user;
+          body.insertBefore(userDiv, body.firstChild);
+
+          const row = document.createElement('div');
+          row.className = 'duka-row';
+          const avatar = document.createElement('div');
+          avatar.className = 'duka-avatar-sm';
+          const bubble = document.createElement('div');
+          bubble.className = 'duka-msg bot';
+          bubble.textContent = msg.reply;
+          row.appendChild(avatar);
+          row.appendChild(bubble);
+          body.insertBefore(row, body.firstChild);
+        }
+        body.scrollTop = body.scrollHeight;
+      } catch(e) {
+        console.error('Failed to sync WhatsApp history:', e);
+      }
+    }
+
+    // ── LIVE DATA ──
+    async function loadLiveData() {
+      try {
+        // TODO: Replace with real API call
+        const live = Math.floor(Math.random() * 5);
+        const today = Math.floor(Math.random() * 50) + 10;
+        document.getElementById('liveCount').textContent = live;
+        document.getElementById('todayCount').textContent = today;
+        const statusEl = document.getElementById('liveStatus');
+        if (live > 0) {
+          statusEl.innerHTML = '● Live';
+          statusEl.style.color = 'var(--green)';
+        } else {
+          statusEl.innerHTML = '○ No one viewing';
+          statusEl.style.color = 'var(--muted)';
+        }
+      } catch(e) { console.log('Live data error', e); }
+    }
+
+    // ── WIDGET ENABLE ──
+    window.enableWidget = function() {
+      const status = document.getElementById('widgetStatus');
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        status.innerHTML = '✅ Widget is already active on your home screen.';
+        return;
+      }
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        status.innerHTML = '📲 Tap the Share button → "Add to Home Screen" to add the widget.';
+        return;
+      }
+      if (window.deferredPrompt) {
+        window.deferredPrompt.prompt();
+        window.deferredPrompt.userChoice.then(choice => {
+          if (choice.outcome === 'accepted') {
+            status.innerHTML = '✅ Widget added successfully!';
+          } else {
+            status.innerHTML = '❌ Widget installation declined.';
+          }
+          window.deferredPrompt = null;
+        });
+      } else {
+        status.innerHTML = 'ℹ️ Open this page in Chrome or Safari and use "Add to Home Screen".';
+      }
+    };
+
+    // ── SHARE / COPY ──
+    window.copyLink = function() {
+      const link = `https://dukaflyer.com/shop/${shopData.slug}`;
+      navigator.clipboard.writeText(link).then(() => showToast('✓ Link copied!'));
+    };
+
+    window.shareWhatsApp = function() {
+      const link = `https://dukaflyer.com/shop/${shopData.slug}`;
+      const msg = encodeURIComponent(`Check out my shop on DukaFlyer! 🛍️\n\nBrowse and order here: ${link}`);
+      window.open(`https://wa.me/?text=${msg}`, '_blank');
+    };
+
+    window.shareDomain = function() {
+      const msg = encodeURIComponent(`Hi DukaFlyer, I'd like to purchase a custom domain for my shop (${shopData.shopName}). Please assist.`);
+      window.open(`https://wa.me/256769396906?text=${msg}`, '_blank');
+    };
+
+    window.paySubscription = function() {
+      const msg = encodeURIComponent(`Hi DukaFlyer, I'd like to pay for my subscription to keep my shop (${shopData.shopName}) active. Please assist.`);
+      window.open(`https://wa.me/256769396906?text=${msg}`, '_blank');
+    };
+
+    window.contactSupport = function() {
+      const msg = encodeURIComponent('Hi DukaFlyer Support, I need help with my shop (' + (shopData.shopName || '') + ').');
+      window.open('https://wa.me/256769396906?text=' + msg, '_blank');
+    };
+
+    // ── SIGN OUT ──
+    window.signOut = async function() {
+      await fbSignOut(auth);
+      window.location.href = 'index.html';
+    };
+
+    // ── TOAST ──
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+    window.showToast = showToast;
+
+    // ── SETTINGS MODAL ──
+    window.openSettings = function() {
+      document.getElementById('sShopName').value = shopData.shopName || '';
+      const wa = shopData.whatsapp || '';
+      document.getElementById('sWhatsapp').value = wa.startsWith('256') ? wa.slice(3) : wa;
+      document.getElementById('sRegion').value = shopData.region || '';
+      document.getElementById('sCategory').value = shopData.category || '';
+      document.getElementById('settingsModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeSettings = function() {
+      document.getElementById('settingsModal').classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    window.handleSettingsOverlay = function(e) {
+      if (e.target === document.getElementById('settingsModal')) closeSettings();
+    };
+
+    window.saveSettings = async function() {
+      const shopName = document.getElementById('sShopName').value.trim();
+      const whatsapp = document.getElementById('sWhatsapp').value.trim();
+      const region = document.getElementById('sRegion').value;
+      const category = document.getElementById('sCategory').value;
+
+      if (!shopName) { showToast('Please enter a shop name'); return; }
+      if (!/^\d{9}$/.test(whatsapp)) { showToast('Enter a valid 9-digit number'); return; }
+      if (!region) { showToast('Please select a region'); return; }
+      if (!category) { showToast('Please select a category'); return; }
+
+      const btn = document.getElementById('saveSettingsBtn');
+      btn.disabled = true; btn.textContent = 'Saving...';
+
+      try {
+        const updates = { shopName, whatsapp: '256' + whatsapp, region, category };
+        await updateDoc(doc(db, 'shops', currentUser.uid), updates);
+        Object.assign(shopData, updates);
+        renderSettings();
+        closeSettings();
+        showToast('Settings saved');
+      } catch(e) {
+        console.error(e);
+        showToast('Something went wrong. Try again.');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Save Changes';
+      }
+    };
+
+    // ── PRODUCT MODAL ──
     window.openAddProduct = function() {
       editingProductId = null;
       modalPhotoFile = null;
@@ -1207,4 +1460,185 @@
       const category = document.getElementById('pCategory').value;
 
       if (!name) { showToast('Please enter a product name'); return; }
-      if (!price || isNaN(price)) { showToast('Please enter a valid price'); return;
+      if (!price || isNaN(price)) { showToast('Please enter a valid price'); return; }
+      if (!category) { showToast('Please select a category'); return; }
+
+      const btn = document.getElementById('saveProductBtn');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      try {
+        let photoURL = modalExistingPhotoURL;
+        if (modalPhotoFile) {
+          btn.textContent = 'Uploading photo...';
+          const photoRef = ref(storage, `products/${currentUser.uid}/${Date.now()}_${modalPhotoFile.name}`);
+          await uploadBytes(photoRef, modalPhotoFile);
+          photoURL = await getDownloadURL(photoRef);
+        }
+
+        let products = [...(shopData.products || [])];
+        if (editingProductId) {
+          products = products.map(p => p.id === editingProductId
+            ? { ...p, name, price: Number(price), description: desc, photoURL: photoURL || null, category }
+            : p
+          );
+        } else {
+          products.push({
+            id: Date.now().toString(),
+            name, price: Number(price),
+            description: desc,
+            photoURL: photoURL || null,
+            category: category,
+            inStock: true,
+            createdAt: new Date().toISOString()
+          });
+        }
+
+        await updateDoc(doc(db, 'shops', currentUser.uid), { products });
+        shopData.products = products;
+
+        closeProductModal();
+        renderProducts();
+        document.getElementById('statProducts').textContent = products.length;
+        showToast(editingProductId ? '✓ Product updated' : '✓ Product added');
+      } catch (e) {
+        console.error(e);
+        showToast('Something went wrong. Try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = editingProductId ? 'Save Changes' : 'Save Product';
+      }
+    };
+
+    // ── DELETE ──
+    window.openDeleteConfirm = function(id) {
+      deletingProductId = id;
+      document.getElementById('confirmOverlay').classList.add('open');
+    };
+
+    window.closeConfirm = function() {
+      deletingProductId = null;
+      document.getElementById('confirmOverlay').classList.remove('open');
+    };
+
+    window.confirmDelete = async function() {
+      if (!deletingProductId) return;
+      try {
+        const products = (shopData.products || []).filter(p => p.id !== deletingProductId);
+        await updateDoc(doc(db, 'shops', currentUser.uid), { products });
+        shopData.products = products;
+        closeConfirm();
+        renderProducts();
+        document.getElementById('statProducts').textContent = products.length;
+        showToast('✓ Product deleted');
+      } catch (e) {
+        showToast('Something went wrong. Try again.');
+      }
+    };
+
+    // ── DUKA AI ──
+    window.toggleDuka = function() {
+      const panel = document.getElementById('dukaPanel');
+      panel.classList.toggle('open');
+      if (panel.classList.contains('open') && !dukaOpened) {
+        dukaOpened = true;
+        const name = dukaMerchantShop?.shopName ? dukaMerchantShop.shopName : 'your shop';
+        dukaAddBubble(`Hey! 👋 I know about ${name} — ask me anything about pricing, marketing, restocking, or running your business.`, 'bot');
+      }
+    };
+
+    function dukaScroll() {
+      const body = document.getElementById('dukaBody');
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function dukaAddBubble(text, who) {
+      const body = document.getElementById('dukaBody');
+      if (who === 'bot') {
+        const row = document.createElement('div');
+        row.className = 'duka-row';
+        const avatar = document.createElement('div');
+        avatar.className = 'duka-avatar-sm';
+        const bubble = document.createElement('div');
+        bubble.className = 'duka-msg bot';
+        bubble.textContent = text;
+        row.appendChild(avatar);
+        row.appendChild(bubble);
+        body.appendChild(row);
+      } else {
+        const div = document.createElement('div');
+        div.className = 'duka-msg user';
+        div.textContent = text;
+        body.appendChild(div);
+      }
+      dukaScroll();
+    }
+
+    function dukaShowTyping() {
+      const body = document.getElementById('dukaBody');
+      const div = document.createElement('div');
+      div.className = 'duka-typing';
+      div.id = 'dukaTypingIndicator';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      body.appendChild(div);
+      dukaScroll();
+    }
+    function dukaHideTyping() {
+      const el = document.getElementById('dukaTypingIndicator');
+      if (el) el.remove();
+    }
+
+    window.sendDuka = async function() {
+      if (dukaBusy) return;
+      const input = document.getElementById('dukaInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+      dukaAddBubble(text, 'user');
+      dukaHistory.push({ role: 'user', text });
+      dukaBusy = true;
+      document.getElementById('dukaSendBtn').disabled = true;
+      dukaShowTyping();
+
+      try {
+        const res = await fetch('https://us-central1-dukaflyer-ea62e.cloudfunctions.net/dukaAi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mode: 'business',
+            message: text,
+            history: dukaHistory,
+            shopContext: dukaMerchantShop ? {
+              shopName: dukaMerchantShop.shopName,
+              category: dukaMerchantShop.category,
+              region: dukaMerchantShop.region,
+              products: (dukaMerchantShop.products || []).slice(0, 20).map(p => ({
+                name: p.name, price: p.price, inStock: p.inStock
+              }))
+            } : null
+          })
+        });
+        const data = await res.json();
+        dukaHideTyping();
+
+        if (!res.ok || data.error) {
+          const msg = data.error === 'overloaded'
+            ? "Ah, I've got so many people talking to me right now, my guy 😅 Give it a minute and try again."
+            : "Sorry, something went wrong. Try again in a moment.";
+          dukaAddBubble(msg, 'bot');
+        } else {
+          dukaAddBubble(data.reply, 'bot');
+          dukaHistory.push({ role: 'assistant', text: data.reply });
+        }
+      } catch (e) {
+        dukaHideTyping();
+        dukaAddBubble("Network hiccup — please try again.", 'bot');
+      } finally {
+        dukaBusy = false;
+        document.getElementById('dukaSendBtn').disabled = false;
+      }
+    };
+  </script>
+</body>
+</html>
