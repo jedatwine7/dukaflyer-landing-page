@@ -15,6 +15,7 @@
 // ============================================================
 const { onRequest } = require('firebase-functions/v2/https');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
+const { onDocumentCreated } = require('firebase-functions/v2/firestore');
 const { defineSecret } = require('firebase-functions/params');
 const admin = require('firebase-admin');
 const { getFirestore } = require('firebase-admin/firestore');
@@ -481,5 +482,58 @@ exports.eventChecker = onSchedule(
 
     // 2. (Future) Add more triggers: payday, holidays, stock alerts...
     console.log('Event checker completed.');
+  }
+);
+
+// ============================================================
+// 9. Live Shop Activity Notifications (batched)
+// ============================================================
+exports.onNewShopView = onDocumentCreated(
+  { document: 'views/{viewId}', region: 'us-central1' },
+  async (event) => {
+    const view = event.data.data();
+    const { slug } = view;
+    if (!slug) return;
+
+    const shopSnap = await db.collection('shops').where('slug', '==', slug).limit(1).get();
+    if (shopSnap.empty) return;
+    const shopDoc = shopSnap.docs[0];
+    const shop = shopDoc.data();
+
+    if (!shop.liveActivityEnabled || !shop.fcmToken) return;
+
+    const now = Date.now();
+    const windowMs = 5 * 60 * 1000; // 5-minute batching window
+    const lastNotifiedAt = shop.lastViewNotifiedAt?.toMillis?.() || 0;
+    const pendingCount = (shop.pendingViewCount || 0) + 1;
+
+    if (shop.lastViewNotifiedAt && (now - lastNotifiedAt) < windowMs) {
+      await shopDoc.ref.update({ pendingViewCount: pendingCount });
+      return;
+    }
+
+    const title = pendingCount === 1 ? '👀 1 new viewer' : `👀 ${pendingCount} new viewers`;
+    const body = pendingCount === 1
+      ? 'Someone just opened your shop.'
+      : `${pendingCount} people viewed your shop recently.`;
+
+    try {
+      await admin.messaging().send({
+        token: shop.fcmToken,
+        notification: { title, body },
+        webpush: { fcmOptions: { link: 'https://dukaflyer.com/dashboard.html' } }
+      });
+    } catch (err) {
+      console.error('FCM send failed:', err);
+      // Token likely stale/expired — clear it so we stop trying
+      if (err.code === 'messaging/registration-token-not-registered') {
+        await shopDoc.ref.update({ fcmToken: admin.firestore.FieldValue.delete(), liveActivityEnabled: false });
+      }
+    }
+
+    await shopDoc.ref.update({
+      lastViewNotifiedAt: admin.firestore.FieldValue.serverTimestamp(),
+      pendingViewCount: 0
+    });
   }
 );
