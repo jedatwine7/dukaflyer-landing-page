@@ -645,39 +645,39 @@
         <button class="btn-action" onclick="contactSupport()" style="border-color:#25d366;color:#25d366">💬 Support</button>
       </div>
       <a href="/advertise" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;background:linear-gradient(135deg,#1877f2,#e1306c);color:white;border:none;border-radius:100px;padding:14px;font-size:0.92rem;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;transition:opacity 0.2s" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">
-        📣 Advertise My Shop on Facebook &amp; Instagram
+         Advertise My Shop on Facebook &amp; Instagram
       </a>
       <a href="/insight" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;background:var(--green-pale);color:var(--green);border:1.5px solid var(--green);border-radius:100px;padding:13px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;transition:background 0.2s" onmouseover="this.style.background='#d5f0e2'" onmouseout="this.style.background='var(--green-pale)'">
-        📊 See Market Insight — What's Selling Where
+         See Market Insight — What's Selling Where
       </a>
     </div>
 
-    <!-- ─── WHATSAPP CONNECTION ─── -->
-    <div class="card" style="margin-bottom:16px">
-      <div class="card-title" style="margin-bottom:16px">
-        <div class="card-icon">📱</div>
-        WhatsApp Connection
-      </div>
-      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:12px">
-        Link your WhatsApp number so Duka can recognise you and send you business alerts.
-      </p>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
-        <input type="tel" id="whatsappInput" placeholder="2567XXXXXXXX" style="flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border);border-radius:100px;font-family:inherit;outline:none;" />
-        <button onclick="linkWhatsApp()" style="background:var(--green);color:white;border:none;border-radius:100px;padding:10px 20px;font-weight:700;cursor:pointer;">Link Number</button>
-      </div>
-      <div id="whatsappStatus" style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;"></div>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:0.8rem;">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-          <input type="checkbox" id="notifLowOrders" /> Low order alerts
-        </label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-          <input type="checkbox" id="notifHolidays" /> Holiday promos
-        </label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-          <input type="checkbox" id="notifPayday" /> Payday reminders
-        </label>
-      </div>
+   <!-- ─── WHATSAPP CONNECTION (with smaller checkboxes) ─── -->
+<div class="card" style="margin-bottom:16px">
+  <div class="card-title" style="margin-bottom:16px">
     </div>
+    WhatsApp Connection
+  </div>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:12px">
+    Link your WhatsApp number so Duka can recognise you and send you business alerts.
+  </p>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+    <input type="tel" id="whatsappInput" placeholder="2567XXXXXXXX" style="flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border);border-radius:100px;font-family:inherit;outline:none;" />
+    <button onclick="linkWhatsApp()" style="background:var(--green);color:white;border:none;border-radius:100px;padding:10px 20px;font-weight:700;cursor:pointer;">Link Number</button>
+  </div>
+  <div id="whatsappStatus" style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;"></div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:0.8rem;">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.78rem;">
+      <input type="checkbox" id="notifLowOrders" style="width:14px;height:14px;accent-color:var(--green);flex-shrink:0;" /> Low order alerts
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.78rem;">
+      <input type="checkbox" id="notifHolidays" style="width:14px;height:14px;accent-color:var(--green);flex-shrink:0;" /> Holiday promos
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.78rem;">
+      <input type="checkbox" id="notifPayday" style="width:14px;height:14px;accent-color:var(--green);flex-shrink:0;" /> Payday reminders
+    </label>
+  </div>
+</div>
 
     <!-- ─── DUKA LIVE ─── -->
     <div class="card" style="margin-bottom:16px">
