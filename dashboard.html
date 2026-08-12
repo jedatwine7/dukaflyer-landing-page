@@ -421,7 +421,7 @@
 
     label .req { color: var(--green); }
 
-    input, select, textarea {
+    input:not([type="checkbox"]):not([type="radio"]), select, textarea {
       width: 100%; padding: 12px 14px;
       border: 1.5px solid var(--border);
       border-radius: 12px; font-size: 0.92rem;
@@ -429,6 +429,14 @@
       background: var(--white); outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
       -webkit-appearance: none;
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--green);
+      cursor: pointer;
+      flex-shrink: 0;
     }
 
     input:focus, select:focus, textarea:focus {
@@ -642,13 +650,13 @@
         <a class="btn-action" id="viewShopBtn" href="#" target="_blank">👁️ View Shop</a>
         <button class="btn-action whatsapp" onclick="shareWhatsApp()">📤 Share</button>
         <button class="btn-action" onclick="shareDomain()">🌐 Get Domain</button>
-        <button class="btn-action" onclick="contactSupport()" style="border-color:#25d366;color:#25d366"> Support</button>
+        <button class="btn-action" onclick="contactSupport()" style="border-color:#25d366;color:#25d366">💬 Support</button>
       </div>
       <a href="/advertise" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;background:linear-gradient(135deg,#1877f2,#e1306c);color:white;border:none;border-radius:100px;padding:14px;font-size:0.92rem;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;transition:opacity 0.2s" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">
          Advertise My Shop on Facebook &amp; Instagram
       </a>
       <a href="/insight" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;background:var(--green-pale);color:var(--green);border:1.5px solid var(--green);border-radius:100px;padding:13px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;transition:background 0.2s" onmouseover="this.style.background='#d5f0e2'" onmouseout="this.style.background='var(--green-pale)'">
-         See Market Insight: What's Selling Where
+         See Market Insight — What's Selling Where
       </a>
     </div>
 
