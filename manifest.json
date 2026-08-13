@@ -1,0 +1,62 @@
+{
+  "name": "DukaFlyer",
+  "short_name": "DukaFlyer",
+  "description": "Build your online shop and track live buyer activity in real time.",
+  "start_url": "/dashboard.html?source=pwa",
+  "id": "/dashboard.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f7faf8",
+  "theme_color": "#0f1a13",
+  "icons": [
+    {
+      "src": "/favicon/favicon-16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Duka Live",
+      "short_name": "Live",
+      "description": "See who's viewing your shop right now",
+      "url": "/dashboard.html?tab=live",
+      "icons": [{ "src": "/favicon/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
