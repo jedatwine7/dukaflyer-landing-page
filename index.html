@@ -1,3 +1,5 @@
+
+Index · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +38,7 @@
     .hero-stat { text-align: center; }
     .hero-stat-num { font-size: 1.2rem; font-weight: 800; color: var(--yellow); letter-spacing: -0.5px; }
     .hero-stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.5); font-weight: 500; }
-
+ 
     .toggle-shops-wrap {
       max-width: 680px;
       margin: 0 auto 16px;
@@ -63,7 +65,7 @@
     .toggle-shops-btn:active {
       transform: scale(0.97);
     }
-
+ 
     .duka-inline {
       max-width: 680px;
       margin: 16px auto 24px;
@@ -177,10 +179,10 @@
       border-radius: 100px; padding: 8px 16px; font-size: 0.8rem; font-weight: 800;
       cursor: pointer; font-family: inherit;
     }
-
+ 
     #shopsSection { display: none; margin-top: 20px; }
     #shopsSection.visible { display: block; }
-
+ 
     .search-wrap { max-width: 680px; margin: 0 auto; padding: 0 16px; }
     .search-box { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(15,26,19,0.15); padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
     .search-box input { flex: 1; border: none; outline: none; font-size: 0.95rem; font-family: inherit; color: var(--dark); background: transparent; }
@@ -216,7 +218,7 @@
     .empty-state { grid-column: 1/-1; text-align: center; padding: 48px 20px; color: var(--muted); }
     .empty-state .emoji { font-size: 2.5rem; margin-bottom: 12px; }
     .empty-state p { font-size: 0.88rem; margin-bottom: 16px; }
-
+ 
     .cta-banner {
       background: var(--dark);
       border-radius: var(--radius);
@@ -233,7 +235,7 @@
     .btn-cta-primary { background: var(--yellow); color: var(--dark); border: none; border-radius: 100px; padding: 13px 24px; font-size: 0.88rem; font-weight: 800; cursor: pointer; font-family: inherit; text-decoration: none; transition: opacity 0.2s; }
     .btn-cta-primary:hover { opacity: 0.9; }
     .btn-cta-secondary { background: none; color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 100px; padding: 13px 24px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; text-decoration: none; }
-
+ 
     #loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 999; }
     #loadingScreen p { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
     .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; }
@@ -251,13 +253,14 @@
     .modal-close { background: none; border: none; font-size: 0.82rem; color: var(--muted); cursor: pointer; font-family: inherit; }
     .error-msg { background: #fff0f0; color: #c0392b; border-radius: 10px; padding: 10px 14px; font-size: 0.82rem; margin-bottom: 12px; display: none; text-align: left; }
     .error-msg.show { display: block; }
-
+ 
     footer { text-align: center; padding: 24px 16px; font-size: 0.78rem; color: var(--muted); border-top: 1px solid var(--border); margin-top: 40px; }
     footer a { color: var(--green); text-decoration: none; font-weight: 600; }
     .partners-strip { border-top: 1px solid var(--border); padding: 20px 16px; text-align: center; }
     .partners-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
     .partners-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 22px; }
     .partner-name { font-size: 0.8rem; font-weight: 700; color: var(--mid); }
+    .maint-banner { background: var(--yellow); color: var(--dark); text-align: center; padding: 10px 16px; font-size: 0.8rem; font-weight: 600; line-height: 1.4; position: relative; z-index: 60; }
   </style>
 </head>
 <body>
@@ -268,7 +271,11 @@
     </div>
   </noscript>
   <div id="loadingScreen"><div class="spinner"></div><p>Loading Duka...</p></div>
-
+ 
+  <div class="maint-banner">
+    🛠️ <strong>Maintenance in progress:</strong> product images are temporarily unavailable while we fix a technical issue. Shops and WhatsApp ordering are unaffected. We'll be back to normal shortly.
+  </div>
+ 
   <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
     <div class="modal">
       <div class="modal-logo">Duka<span>Flyer</span></div>
@@ -285,7 +292,7 @@
       <button class="modal-close" onclick="closeModal()">Cancel</button>
     </div>
   </div>
-
+ 
   <nav>
     <div class="logo">Duka<span>Flyer</span></div>
     <div class="nav-right">
@@ -293,7 +300,7 @@
       <a class="btn-create" id="navCreate" href="#">+ Create Shop</a>
     </div>
   </nav>
-
+ 
   <div class="hero">
     <h1>Build Your Shop.<br>Sell on <span>WhatsApp</span>.</h1>
     <p>Create your online shop in 5 minutes, free to start. Or browse shops already selling across Uganda and the Globe.</p>
@@ -303,7 +310,7 @@
       <div class="hero-stat"><div class="hero-stat-num">UGX</div><div class="hero-stat-label">MoMo Friendly</div></div>
     </div>
   </div>
-
+ 
   <!-- Inline Duka Chat -->
   <div class="duka-inline">
     <div class="duka-header">
@@ -325,12 +332,12 @@
       <button class="example-chip" onclick="sendExample('shop', 'I want to build a shop on DukaFlyer')"> Build my shop</button>
     </div>
   </div>
-
+ 
   <!-- Toggle Shops Button -->
   <div class="toggle-shops-wrap">
     <button class="toggle-shops-btn" id="toggleShopsBtn">📋 View created shops</button>
   </div>
-
+ 
   <!-- Shops Section – hidden by default -->
   <div id="shopsSection">
     <div class="search-wrap">
@@ -339,7 +346,7 @@
         <input type="text" id="searchInput" placeholder="Search shops, categories, regions..." oninput="filterShops()" />
       </div>
     </div>
-
+ 
     <div class="filters-wrap">
       <button class="filter-chip active" onclick="setCategory('', this)">All</button>
       <button class="filter-chip" onclick="setCategory('Fashion & Clothing', this)">Fashion</button>
@@ -352,13 +359,13 @@
       <button class="filter-chip" onclick="setCategory('Pharmacy & Health', this)">Health</button>
       <button class="filter-chip" onclick="setCategory('Other', this)">More</button>
     </div>
-
+ 
     <div class="main">
       <div id="featuredSection" style="display:none">
         <div class="section-header"><div class="section-title">Featured Shops</div></div>
         <div class="featured-row" id="featuredRow"></div>
       </div>
-
+ 
       <div class="section-header">
         <div class="section-title">All Shops</div>
         <div class="section-count" id="shopsCount"></div>
@@ -366,7 +373,7 @@
       <div class="shops-grid" id="shopsGrid"></div>
     </div>
   </div>
-
+ 
   <!-- CTA Banner -->
   <div class="cta-banner">
     <h2>Sell to all of Uganda and the Globe</h2>
@@ -376,12 +383,12 @@
       <a class="btn-cta-secondary" href="https://wa.me/256769396906" target="_blank">💬 Talk to Us</a>
     </div>
   </div>
-
+ 
   <footer>
     <p style="font-size:1.1rem;font-weight:800;color:var(--green);margin-bottom:6px">Duka<span style="color:var(--yellow)">Flyer</span></p>
     <p>2026 DukaFlyer · Kampala, Uganda · <a href="https://wa.me/256769396906">WhatsApp Support</a></p>
   </footer>
-
+ 
   <div class="partners-strip">
     <p class="partners-label">Our Partners</p>
     <div class="partners-row">
@@ -391,7 +398,7 @@
       <span class="partner-name">Egret Pilgrims</span>
     </div>
   </div>
-
+ 
   <script type="module">
     // ============================================================
     // 1. IMPORTS
@@ -405,7 +412,7 @@
       doc, 
       getDoc
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+ 
     const firebaseConfig = {
       apiKey: "AIzaSyBYEQQMbfR_YHq5nISaFRgZ0SOuAHWHWWU",
       authDomain: "dukaflyer-ea62e.firebaseapp.com",
@@ -414,12 +421,12 @@
       messagingSenderId: "149788171032",
       appId: "1:149788171032:web:2ddeb453162284eed8dc6d"
     };
-
+ 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
     const db = getFirestore(app);
-
+ 
     let allShops = [];
     let activeCategory = '';
     let dukaMerchantShop = null;
@@ -429,9 +436,9 @@
     let dukaPendingFile = null;
     let dukaCurrentUser = null;
     let shopsLoaded = false;
-
+ 
     document.getElementById('loadingScreen').style.display = 'none';
-
+ 
     // ============================================================
     // 2. AUTH STATE CHANGE
     // ============================================================
@@ -440,7 +447,7 @@
       const navCreate = document.getElementById('navCreate');
       const ctaCreate = document.getElementById('ctaCreate');
       dukaCurrentUser = user || null;
-
+ 
       if (user) {
         navSignIn.textContent = 'My Shop →';
         navSignIn.href = '/dashboard';
@@ -450,7 +457,7 @@
         navSignIn.onclick = null;
         navCreate.onclick = null;
         ctaCreate.onclick = null;
-
+ 
         try {
           const shopSnap = await getDoc(doc(db, 'shops', user.uid));
           dukaMerchantShop = shopSnap.exists() ? shopSnap.data() : null;
@@ -463,11 +470,11 @@
         ctaCreate.onclick = (e) => { e.preventDefault(); openModal(); };
         dukaMerchantShop = null;
       }
-
+ 
       initDuka();
       updateDukaAttachVisibility();
     });
-
+ 
     // ============================================================
     // 3. TOGGLE SHOPS BUTTON
     // ============================================================
@@ -478,10 +485,10 @@
         this.textContent = '📋 View created shops';
         return;
       }
-
+ 
       section.classList.add('visible');
       this.textContent = '✕ Hide shops';
-
+ 
       if (!shopsLoaded) {
         const grid = document.getElementById('shopsGrid');
         grid.innerHTML = '<div class="empty-state"><div class="spinner" style="margin:0 auto;"></div><p>Loading shops...</p></div>';
@@ -489,7 +496,7 @@
         shopsLoaded = true;
       }
     });
-
+ 
     // ============================================================
     // 4. SHOPS
     // ============================================================
@@ -514,7 +521,7 @@
         renderShops([]);
       }
     }
-
+ 
     function renderFeatured() {
       const featured = allShops.filter(s => s.featured);
       const featuredSection = document.getElementById('featuredSection');
@@ -527,7 +534,7 @@
           <div class="featured-meta">📍 ${shop.region} · ${(shop.products||[]).length} products</div>
         </a>`).join('');
     }
-
+ 
     function renderShops(shops) {
       const grid = document.getElementById('shopsGrid');
       document.getElementById('shopsCount').textContent = shops.length + ' shop' + (shops.length !== 1 ? 's' : '');
@@ -548,14 +555,14 @@
           <div class="visit-btn">Visit Shop →</div>
         </a>`).join('');
     }
-
+ 
     window.setCategory = function(cat, btn) {
       activeCategory = cat;
       document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       filterShops();
     };
-
+ 
     window.filterShops = function() {
       const query = document.getElementById('searchInput').value.toLowerCase().trim();
       let filtered = allShops;
@@ -568,7 +575,7 @@
       document.getElementById('shopsCount').textContent = filtered.length + ' shop' + (filtered.length!==1?'s':'');
       renderShops(filtered);
     };
-
+ 
     // ============================================================
     // 5. DUKA CHAT
     // ============================================================
@@ -581,7 +588,7 @@
         addDukaMessage("Hey! 👋 I'm Duka. Ask me anything about starting or growing your business in Uganda.", 'bot');
       }
     }
-
+ 
     function addDukaMessage(text, who) {
       const body = document.getElementById('dukaBody');
       if (who === 'bot') {
@@ -603,7 +610,7 @@
       }
       body.scrollTop = body.scrollHeight;
     }
-
+ 
     function showTyping() {
       const body = document.getElementById('dukaBody');
       const div = document.createElement('div');
@@ -613,12 +620,12 @@
       body.appendChild(div);
       body.scrollTop = body.scrollHeight;
     }
-
+ 
     function hideTyping() {
       const el = document.getElementById('dukaTypingIndicator');
       if (el) el.remove();
     }
-
+ 
     function showGate() {
       const body = document.getElementById('dukaBody');
       const existing = body.querySelector('.duka-gate');
@@ -629,17 +636,17 @@
       body.appendChild(div);
       body.scrollTop = body.scrollHeight;
     }
-
+ 
     window.dukaGateSignIn = function() { openModal(); };
-
+ 
     const DUKA_MAX_FILE_BYTES = 4 * 1024 * 1024;
-
+ 
     function updateDukaAttachVisibility() {
       const btn = document.getElementById('dukaAttachBtn');
       if (!btn) return;
       btn.style.display = dukaMerchantShop ? '' : 'none';
     }
-
+ 
     window.handleDukaFileSelect = function(fileObj) {
       if (!fileObj) return;
       if (!dukaMerchantShop) {
@@ -664,7 +671,7 @@
       reader.onerror = () => addDukaMessage("Couldn't read that file — try again?", 'bot');
       reader.readAsDataURL(fileObj);
     };
-
+ 
     function renderDukaAttachPreview() {
       const el = document.getElementById('dukaAttachPreview');
       if (!dukaPendingFile) { el.style.display = 'none'; el.innerHTML = ''; return; }
@@ -672,20 +679,20 @@
       el.style.display = 'flex';
       el.innerHTML = `<span>${icon} ${dukaPendingFile.name}</span><button onclick="clearDukaAttachment()" type="button">✕</button>`;
     }
-
+ 
     window.clearDukaAttachment = function() {
       dukaPendingFile = null;
       document.getElementById('dukaFileInput').value = '';
       renderDukaAttachPreview();
     };
-
+ 
     window.sendExample = function(mode, text) {
       dukaMode = mode;
       addDukaMessage(text, 'user');
       dukaHistory.push({ role: 'user', text });
       sendToBackend(text);
     };
-
+ 
     window.sendDuka = function() {
       const input = document.getElementById('dukaInput');
       const text = input.value.trim();
@@ -697,21 +704,21 @@
       clearDukaAttachment();
       sendToBackend(text, attachedFile);
     };
-
+ 
     // ============================================================
     // 6. SEND TO BACKEND – NO AUTH TOKEN
     // ============================================================
     async function sendToBackend(text, attachedFile) {
       if (dukaBusy) return;
-
+ 
       dukaBusy = true;
       document.getElementById('dukaSendBtn').disabled = true;
       showTyping();
-
+ 
       try {
         const headers = { 'Content-Type': 'application/json' };
         // NO Authorization header – backend doesn't require it for simple chat
-
+ 
         const payload = {
           mode: dukaMode,
           message: text,
@@ -726,16 +733,16 @@
             }))
           } : null
         };
-
+ 
         const res = await fetch('https://us-central1-dukaflyer-ea62e.cloudfunctions.net/dukaAi', {
           method: 'POST',
           headers,
           body: JSON.stringify(payload)
         });
-
+ 
         const data = await res.json();
         hideTyping();
-
+ 
         if (!res.ok || data.error) {
           const msg = data.error === 'overloaded'
             ? "Ah, I've got so many people talking to me right now, my guy 😅 Give it a minute and try again."
@@ -744,7 +751,7 @@
         } else {
           addDukaMessage(data.reply, 'bot');
           dukaHistory.push({ role: 'assistant', text: data.reply });
-
+ 
           if (data.shopDraft) {
             try { localStorage.setItem('dukaShopDraft', JSON.stringify(data.shopDraft)); } catch(e) {}
             const body = document.getElementById('dukaBody');
@@ -763,7 +770,7 @@
         document.getElementById('dukaSendBtn').disabled = false;
       }
     }
-
+ 
     // ============================================================
     // 7. AUTH MODALS
     // ============================================================
@@ -781,7 +788,7 @@
         if (e.code !== 'auth/cancelled-popup-request') { errorMsg.textContent = 'Something went wrong. Please try again.'; errorMsg.classList.add('show'); }
       }
     };
-
+ 
     window.openModal = function() { document.getElementById('modalOverlay').classList.add('active'); document.body.style.overflow = 'hidden'; };
     window.closeModal = function() { document.getElementById('modalOverlay').classList.remove('active'); document.body.style.overflow = ''; };
     window.handleOverlayClick = function(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); };
